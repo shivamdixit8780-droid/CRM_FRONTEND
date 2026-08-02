@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import VerifyOtp from "./pages/VerifyOtp";
 import Login from "./pages/Login";
-import Layout from "./components/layout/Layout";
+import Layout from "./components/Layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import Leads from "./pages/Leads";
