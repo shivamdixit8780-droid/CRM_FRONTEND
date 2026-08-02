@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import "../styles/Login.css";
 
 function Login() {
   const navigate = useNavigate();
@@ -44,38 +45,67 @@ function Login() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "50px auto" }}>
-      <h2>Login</h2>
+  <div className="login-page">
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <div className="login-card">
+
+      <div className="login-header">
+        <h2>Welcome Back 👋</h2>
+        <p>Login to your CRM account</p>
+      </div>
+
+      {error && (
+        <div className="login-error">
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <br /><br />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <br /><br />
+        <div className="input-group">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <button type="submit" disabled={loading}>
+
+        <div className="input-group">
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+
+        <button 
+          className="login-btn"
+          type="submit"
+          disabled={loading}
+        >
           {loading ? "Logging in..." : "Login"}
         </button>
-      </form>
-    </div>
-  );
-}
 
+      </form>
+
+
+      <div className="login-footer">
+        CRM Management System
+      </div>
+
+    </div>
+
+  </div>
+);
+}
 export default Login;
