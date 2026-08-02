@@ -1,0 +1,144 @@
+/* ===========================
+   Employees Page
+=========================== */
+
+.employees-page {
+  padding: 25px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+
+.error-message {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 80px;
+}
+
+/* ===========================
+   Table Card
+=========================== */
+
+.employee-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+/* ===========================
+   Table
+=========================== */
+
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employee-table thead {
+  background: #2563eb;
+  color: white;
+}
+
+.employee-table th {
+  padding: 18px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.employee-table td {
+  padding: 16px;
+  color: #334155;
+  font-size: 15px;
+}
+
+.employee-table tbody tr {
+  transition: .25s;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.employee-table tbody tr:hover {
+  background: #f1f5f9;
+}
+
+.employee-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* ===========================
+   Role Badge
+=========================== */
+
+.role-badge {
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.role-admin {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.role-manager {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.role-sales {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* ===========================
+   Select
+=========================== */
+
+.role-select {
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  cursor: pointer;
+  background: white;
+  transition: .2s;
+}
+
+.role-select:hover {
+  border-color: #2563eb;
+}
+
+.role-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.2);
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media(max-width:900px){
+
+.employee-table{
+display:block;
+overflow-x:auto;
+white-space:nowrap;
+}
+
+}

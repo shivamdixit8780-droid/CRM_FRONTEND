@@ -1,0 +1,16 @@
+:root{
+  --primary:#2563EB;
+  --secondary:#6366F1;
+  --success:#10B981;
+  --warning:#F59E0B;
+  --danger:#EF4444;
+
+  --bg:#F5F7FB;
+  --white:#ffffff;
+  --text:#1F2937;
+  --border:#E5E7EB;
+
+  --sidebar-width:260px;
+  --header-height:70px;
+  --radius:12px;
+}

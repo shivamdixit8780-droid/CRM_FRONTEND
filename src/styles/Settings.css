@@ -1,0 +1,208 @@
+/* ===============================
+   SETTINGS PAGE
+================================ */
+
+.settings-page{
+    padding:30px;
+    background:#f8fafc;
+    min-height:100vh;
+}
+
+.settings-title{
+    font-size:30px;
+    font-weight:700;
+    color:#1e293b;
+    margin-bottom:25px;
+}
+
+.settings-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
+    gap:22px;
+}
+
+/* ===============================
+   CARD
+================================ */
+
+.setting-card{
+    background:#fff;
+    border-radius:14px;
+    padding:22px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.setting-card:hover{
+    transform:translateY(-3px);
+}
+
+.setting-card h4{
+    margin-bottom:18px;
+    color:#2563eb;
+    font-size:20px;
+}
+
+/* ===============================
+   INPUT
+================================ */
+
+.setting-card input[type=text],
+.setting-card input[type=password]{
+
+    width:100%;
+    padding:12px;
+    border:1px solid #dbe2ea;
+    border-radius:8px;
+    margin-bottom:15px;
+    outline:none;
+    transition:.25s;
+
+}
+
+.setting-card input:focus{
+
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.15);
+
+}
+
+.setting-card input[type=file]{
+
+    margin:10px 0 20px;
+
+}
+
+/* ===============================
+   BUTTON
+================================ */
+
+.setting-btn{
+
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:11px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+.setting-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+.setting-btn:disabled{
+
+    opacity:.5;
+    cursor:not-allowed;
+
+}
+
+/* ===============================
+   COMPANY LOGO
+================================ */
+
+.company-logo{
+
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid #2563eb;
+    margin-bottom:15px;
+
+}
+
+/* ===============================
+   ACCOUNT INFO
+================================ */
+
+.account-info p{
+
+    margin:10px 0;
+    color:#475569;
+
+}
+
+/* ===============================
+   TABLE
+================================ */
+
+.login-table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}
+
+.login-table thead{
+
+    background:#2563eb;
+    color:white;
+
+}
+
+.login-table th{
+
+    padding:14px;
+
+}
+
+.login-table td{
+
+    padding:14px;
+    border-bottom:1px solid #eee;
+
+}
+
+.login-table tbody tr:hover{
+
+    background:#f8fafc;
+
+}
+
+.success{
+
+    color:#16a34a;
+    font-weight:600;
+
+}
+
+.failed{
+
+    color:#dc2626;
+    font-weight:600;
+
+}
+
+/* ===============================
+   ERROR
+================================ */
+
+.error{
+
+    background:#fee2e2;
+    color:#dc2626;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:20px;
+
+}
+
+/* ===============================
+   Responsive
+================================ */
+
+@media(max-width:768px){
+
+.settings-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
