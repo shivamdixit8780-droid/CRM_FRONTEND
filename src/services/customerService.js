@@ -2,11 +2,8 @@ import api from "./api";
 
 export const getCustomers = () => api.get("/customers");
 
-export const getCustomerById = (id) =>
-  api.get(`/customers/${id}`);
+export const getCustomerById = (id) => api.get(`/customers/${id}`);
 
-export const updateCustomer = (id, data) =>
-  api.put(`/customers/${id}`, data);
+export const updateCustomer = (id, data) => api.put(`/customers/${id}`, data);
 
-export const deleteCustomer = (id) =>
-  api.delete(`/customers/${id}`);
+export const deleteCustomer = (id) => api.delete(`/customers/${id}`);

@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { getReports } from "../services/reportService";
+import "../styles/Reports.css";
 import {
   ResponsiveContainer,
-  BarChart,
-  Bar,
   LineChart,
   Line,
   PieChart,
@@ -19,8 +18,18 @@ import {
 function Reports() {
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState("");
+
+  // ✅ Chart date filter — default LAST 7 DAYS
+  const today = new Date();
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(today.getDate() - 6);
+
+  const [chartDateRange, setChartDateRange] = useState({
+    startDate: sevenDaysAgo.toISOString().split("T")[0],
+    endDate: today.toISOString().split("T")[0],
+  });
+
   const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
 
   useEffect(() => {
@@ -33,7 +42,7 @@ function Reports() {
       const res = await getReports(startDate, endDate);
       setReport(res.data);
     } catch (err) {
-      setError("Report load nahi ho paaya");
+      setError("Report load failed");
     } finally {
       setLoading(false);
     }
@@ -49,243 +58,208 @@ function Reports() {
 
   const clearFilter = () => {
     setDateRange({ startDate: "", endDate: "" });
-    fetchReport(); // default: current month
+    fetchReport();
   };
-  const chartData = report?.monthlyRevenue || [];
 
-  const pieData =
-    report?.leadStatus?.map((item) => ({
-      name: item._id,
-      value: item.count,
-    })) || [];
+  // ✅ Filter chart data by date range
+  const filterChartByDate = (data) => {
+    if (!data || !chartDateRange.startDate || !chartDateRange.endDate) return data;
+    const start = new Date(chartDateRange.startDate);
+    const end = new Date(chartDateRange.endDate);
+    end.setHours(23, 59, 59, 999);
+    return data.filter((item) => {
+      if (!item.date && !item.month) return true;
+      const d = new Date(item.date || item.month);
+      return d >= start && d <= end;
+    });
+  };
 
-  const COLORS = [
-    "#3B82F6",
-    "#22C55E",
-    "#F59E0B",
-    "#EF4444",
-  ];
+  const chartData = filterChartByDate(report?.monthlyRevenue || []);
+
+  const pieData = report?.leadStatus?.map((item) => ({
+    name: item._id,
+    value: item.count,
+  })) || [];
+
+  const COLORS = ["#3B82F6", "#22C55E", "#F59E0B", "#EF4444", "#a855f7", "#f97316", "#06b6d4", "#8b5cf6"];
   const activities = report?.recentActivities || [];
 
-  if (loading) return <p>Loading report...</p>;
+  if (loading) return <p className="reports-loading">Loading report...</p>;
 
   return (
-
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-800">
-          Reports Dashboard
-        </h2>
+    <div className="reports-page">
+      <div className="reports-header">
+        <h2 className="reports-title">📊 Reports Dashboard</h2>
+        <p className="reports-subtitle">Comprehensive business analytics</p>
       </div>
 
-      {/* Date Range Filter */}
-      <div className="bg-white rounded-xl shadow border p-5 mb-6">
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-          <input
-            type="date"
-            name="startDate"
-            value={dateRange.startDate}
-            onChange={handleDateChange}
-            className="border rounded-lg px-4 py-2"
-          />
-
-          <input
-            type="date"
-            name="endDate"
-            value={dateRange.endDate}
-            onChange={handleDateChange}
-            className="border rounded-lg px-4 py-2"
-          />
-
-          <button
-            onClick={applyFilter}
-            className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700"
-          >
-            Apply Filter
-          </button>
-
-          <button
-            onClick={clearFilter}
-            className="bg-gray-200 rounded-lg px-4 py-2 hover:bg-gray-300"
-          >
-            Reset
-          </button>
-
+      {/* Main Date Filter */}
+      <div className="filter-card">
+        <div className="filter-grid">
+          <div className="filter-field">
+            <label>From</label>
+            <input type="date" name="startDate" value={dateRange.startDate} onChange={handleDateChange} className="filter-input" />
+          </div>
+          <div className="filter-field">
+            <label>To</label>
+            <input type="date" name="endDate" value={dateRange.endDate} onChange={handleDateChange} className="filter-input" />
+          </div>
+          <button onClick={applyFilter} className="btn btn-primary">Apply Filter</button>
+          <button onClick={clearFilter} className="btn btn-secondary">Reset</button>
         </div>
-
       </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="reports-error">{error}</p>}
 
       {report && (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
-
-            <div className="bg-white rounded-xl shadow border p-5">
-              <p className="text-gray-500 text-sm">Total Leads</p>
-              <h2 className="text-3xl font-bold text-blue-600">
-                {report.totalLeads}
-              </h2>
+          {/* ✅ 5 STATS CARDS (Revenue card removed) */}
+          <div className="stats-grid">
+            {/* 1. Total Leads */}
+            <div className="stat-card">
+              <div className="stat-card-header">
+                <span className="stat-card-icon blue">👥</span>
+                <div className="stat-card-content">
+                  <p className="stat-label">Total Leads</p>
+                  <h2 className="stat-value">{report.totalLeads || 0}</h2>
+                </div>
+              </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow border p-5">
-              <p className="text-gray-500 text-sm">Total Orders</p>
-              <h2 className="text-3xl font-bold text-purple-600">
-                {report.totalOrders}
-              </h2>
+            {/* 2. Total Orders */}
+            <div className="stat-card">
+              <div className="stat-card-header">
+                <span className="stat-card-icon purple">📦</span>
+                <div className="stat-card-content">
+                  <p className="stat-label">Total Orders</p>
+                  <h2 className="stat-value">{report.totalOrders || 0}</h2>
+                </div>
+              </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow border p-5">
-              <p className="text-gray-500 text-sm">Total Sales</p>
-              <h2 className="text-3xl font-bold text-green-600">
-                {report.totalSales}
-              </h2>
+            {/* 3. Total Sales */}
+            <div className="stat-card">
+              <div className="stat-card-header">
+                <span className="stat-card-icon green">💰</span>
+                <div className="stat-card-content">
+                  <p className="stat-label">Total Sales</p>
+                  <h2 className="stat-value">₹{Number(report.totalSales || 0).toLocaleString()}</h2>
+                </div>
+              </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow border p-5">
-              <p className="text-gray-500 text-sm">Revenue</p>
-              <h2 className="text-3xl font-bold text-orange-600">
-                ₹{report.revenue}
-              </h2>
+            {/* ✅ 4. Delivered Revenue (ONLY THIS ONE KEEP) */}
+            <div className="stat-card">
+              <div className="stat-card-header">
+                <span className="stat-card-icon teal">✅</span>
+                <div className="stat-card-content">
+                  <p className="stat-label">Delivered Revenue</p>
+                  <h2 className="stat-value">₹{Number(report.deliveredRevenue || report.revenue || 0).toLocaleString()}</h2>
+                </div>
+              </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow border p-5">
-              <p className="text-gray-500 text-sm">Conversion Rate</p>
-              <h2 className="text-3xl font-bold text-red-600">
-                {report.conversionRate}
-              </h2>
+            {/* 5. Conversion Rate */}
+            <div className="stat-card">
+              <div className="stat-card-header">
+                <span className="stat-card-icon red">📊</span>
+                <div className="stat-card-content">
+                  <p className="stat-label">Conversion Rate</p>
+                  <h2 className="stat-value">{report.conversionRate || "0%"}</h2>
+                </div>
+              </div>
             </div>
-
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-6 mt-8">
+          {/* Chart Date Filter */}
+          <div className="chart-filter-bar">
+            <div className="date-field">
+              <label>Chart From</label>
+              <input
+                type="date"
+                value={chartDateRange.startDate}
+                onChange={(e) => setChartDateRange({ ...chartDateRange, startDate: e.target.value })}
+                className="filter-input"
+              />
+            </div>
+            <div className="date-field">
+              <label>Chart To</label>
+              <input
+                type="date"
+                value={chartDateRange.endDate}
+                onChange={(e) => setChartDateRange({ ...chartDateRange, endDate: e.target.value })}
+                className="filter-input"
+              />
+            </div>
+            <button onClick={() => {
+              const t = new Date();
+              const s = new Date();
+              s.setDate(t.getDate() - 6);
+              setChartDateRange({
+                startDate: s.toISOString().split("T")[0],
+                endDate: t.toISOString().split("T")[0],
+              });
+            }} className="btn btn-secondary">Last 7 Days</button>
+            <button onClick={() => {
+              const now = new Date();
+              setChartDateRange({
+                startDate: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`,
+                endDate: now.toISOString().split("T")[0],
+              });
+            }} className="btn btn-secondary">This Month</button>
+          </div>
 
-            <div className="bg-white rounded-2xl shadow p-5">
-
-              <h3 className="text-lg font-semibold mb-4">
-                Lead Status Distribution
-              </h3>
-
-              <ResponsiveContainer width="100%" height={320}>
-
+          {/* Charts */}
+          <div className="charts-grid">
+            <div className="chart-card">
+              <h3 className="chart-title">Revenue Trend</h3>
+              <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={chartData}>
-
-                  <CartesianGrid strokeDasharray="3 3" />
-
-                  <XAxis dataKey="month" />
-
-                  <YAxis />
-
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="month" stroke="#6b7280" />
+                  <YAxis stroke="#6b7280" />
                   <Tooltip />
-
-                  <Legend />
-
-                  <Line
-                    type="monotone"
-                    dataKey="revenue"
-                    stroke="#2563eb"
-                    strokeWidth={3}
-                  />
-
+                  <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={3} />
                 </LineChart>
-
               </ResponsiveContainer>
-
             </div>
 
-            <div className="bg-white rounded-2xl shadow p-5">
-
-              <h3 className="text-lg font-semibold mb-4">
-                Revenue Distribution
-              </h3>
-
-              <ResponsiveContainer width="100%" height={300}>
-
+            <div className="chart-card">
+              <h3 className="chart-title">Lead Status Distribution</h3>
+              <ResponsiveContainer width="100%" height={280}>
                 <PieChart>
-
-                  <Pie
-                    data={pieData}
-                    dataKey="value"
-                    outerRadius={100}
-                    label
-                  >
-
+                  <Pie data={pieData} dataKey="value" outerRadius={90} label>
                     {pieData.map((entry, index) => (
-                      <Cell
-                        key={index}
-                        fill={COLORS[index % COLORS.length]}
-                      />
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
                     ))}
-
                   </Pie>
-
                   <Legend />
                   <Tooltip formatter={(value) => [`${value} Leads`, "Count"]} />
-
-                  <Tooltip />
-
                 </PieChart>
-
               </ResponsiveContainer>
-
             </div>
-
           </div>
-          <div className="bg-white rounded-2xl shadow p-6 mt-8">
 
-            <h3 className="text-xl font-bold mb-6">
-              Recent Activities
-            </h3>
-
-            <div className="space-y-4">
-
+          {/* Recent Activities */}
+          <div className="activities-card">
+            <h3 className="activities-title">📝 Recent Activities</h3>
+            <div className="activities-list">
               {activities.length === 0 ? (
-
-                <p className="text-gray-500">
-                  No recent activities found.
-                </p>
-
+                <p className="activities-empty">No recent activities found.</p>
               ) : (
-
                 activities.map((activity, index) => (
-
-                  <div
-                    key={index}
-                    className="flex items-center justify-between border-b pb-3"
-                  >
-
-                    <div>
-
-                      <p className="font-semibold">
-
-                        {activity.title}
-
-                      </p>
-
-                      <p className="text-sm text-gray-500">
-
-                        {activity.type}
-
-                      </p>
-
+                  <div key={index} className="activity-item">
+                    <div className="activity-info">
+                      <p className="activity-name">{activity.title}</p>
+                      <p className="activity-type">{activity.type}</p>
                     </div>
-
-                    <span className="text-xs text-gray-400">
-
+                    <span className="activity-time">
                       {new Date(activity.createdAt).toLocaleString()}
-
                     </span>
-
                   </div>
-
                 ))
-
               )}
-
             </div>
-
           </div>
         </>
       )}

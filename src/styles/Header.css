@@ -1,0 +1,439 @@
+/* ========================
+   HEADER / TOPBAR STYLES
+======================== */
+
+.header {
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: 72px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ================== LEFT SECTION ================== */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+/* Mobile Menu Button */
+.menu-btn {
+  background: none;
+  border: none;
+  color: #4b5563;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-btn:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+/* Page Title */
+.page-title h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.page-title p {
+  margin: 2px 0 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ================== SEARCH SECTION ================== */
+.header-search {
+  flex: 1;
+  max-width: 500px;
+  position: relative;
+}
+
+.search-box {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 13px 44px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.search-field {
+  width: 100%;
+  padding: 10px 16px 10px 44px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+  font-size: 14px;
+  color: #1f2937;
+  outline: none;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.search-field::placeholder {
+  color: #9ca3af;
+}
+
+.search-field:focus {
+  border-color: #2563eb;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Search Loading */
+.search-loading {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 6px;
+  padding: 12px 16px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #6b7280;
+  text-align: center;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Search Results Dropdown */
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 6px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Scrollbar for dropdown */
+.search-results::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 10px;
+}
+
+/* No Results */
+.no-results {
+  padding: 20px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* Search Item */
+.search-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.search-item:last-child {
+  border-bottom: none;
+}
+
+.search-item:hover {
+  background-color: #f9fafb;
+}
+
+.search-item .font-medium {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f2937;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Search Badge */
+.search-badge {
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+/* ================== RIGHT SECTION ================== */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Icon Buttons (Bell, Moon) */
+.header-icon-btn {
+  background: none;
+  border: none;
+  color: #4b5563;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.header-icon-btn:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  z-index: 9999 !important;
+  overflow-y: auto !important;
+}
+
+/* Notification Dot */
+/* .notification-btn {
+  position: relative;
+} */
+
+.notification-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* ================== PROFILE BUTTON ================== */
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 6px 12px 6px 6px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-btn:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.profile-image {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  white-space: nowrap;
+}
+
+.profile-role {
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  color: #6b7280;
+  text-transform: capitalize;
+}
+
+.profile-arrow {
+  color: #6b7280;
+  margin-left: 2px;
+}
+
+/* ================== RESPONSIVE ================== */
+@media (max-width: 1024px) {
+  .menu-btn {
+    display: flex;
+  }
+}
+
+@media (max-width: 900px) {
+  .header {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .header-search {
+    max-width: 300px;
+  }
+
+  .profile-info {
+    display: none;
+  }
+
+  .profile-btn {
+    padding: 4px;
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    height: auto;
+    padding: 10px 14px;
+    flex-wrap: wrap;
+  }
+
+  .page-title h1 {
+    font-size: 18px;
+  }
+
+  .page-title p {
+    display: none;
+  }
+
+  .header-search {
+    order: 3;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .header-right {
+    gap: 6px;
+  }
+
+  .profile-arrow {
+    display: none;
+  }
+}
+
+/* Hide notification bell */
+.notification-btn {
+  display: none !important;
+}
+
+/* ========================
+   MOBILE SEARCH FIX
+======================== */
+
+/* Mobile: Search dropdown full width & visible */
+@media (max-width: 640px) {
+  .header-search {
+    max-width: 100% !important;
+    width: 100% !important;
+    order: 3;
+    margin-top: 10px;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .search-dropdown {
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    max-height: 250px !important;
+    overflow-y: auto !important;
+    z-index: 9999 !important;
+    position: fixed !important;
+    /* Mobile pe fixed rakho */
+    top: 130px !important;
+    /* Header ke neeche */
+    border-radius: 0 0 10px 10px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    z-index: 9999;
+    overflow-y: auto;
+    max-height: 300px;
+  }
+
+  .search-item {
+    padding: 12px 16px !important;
+  }
+
+  .item-name {
+    font-size: 15px !important;
+  }
+
+  .search-badge {
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+  }
+}
+
+/* Extra: Prevent sidebar overlap */
+@media (max-width: 640px) {
+  .search-dropdown {
+    z-index: 99999 !important;
+    position: absolute !important;
+  }
+
+  .header {
+    flex-wrap: wrap !important;
+    height: auto !important;
+    gap: 10px !important;
+  }
+
+  .search-field {
+    width: 100% !important;
+    font-size: 14px !important;
+  }
+  
+}

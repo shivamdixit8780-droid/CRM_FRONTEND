@@ -1,4 +1,6 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
+
 import Register from "./pages/Register";
 import VerifyOtp from "./pages/VerifyOtp";
 import Login from "./pages/Login";
@@ -7,7 +9,6 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import Leads from "./pages/Leads";
 import Customers from "./pages/Customers";
-import FollowUps from "./pages/FollowUps";
 import Orders from "./pages/Orders";
 import Products from "./pages/Products";
 import Employees from "./pages/Employees";
@@ -15,14 +16,39 @@ import Reports from "./pages/Reports";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 
-
 function App() {
+  const { user, loading } = useAuth();
+
+  // Auth check complete hone ka wait
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Routes>
-      <Route path="/register" element={<Register />} />
-      <Route path="/verify-otp" element={<VerifyOtp />} />
-      <Route path="/login" element={<Login />} />
+      {/* Public Routes */}
+      <Route
+        path="/register"
+        element={
+          user ? <Navigate to="/dashboard" replace /> : <Register />
+        }
+      />
 
+      <Route
+        path="/verify-otp"
+        element={
+          user ? <Navigate to="/dashboard" replace /> : <VerifyOtp />
+        }
+      />
+
+      <Route
+        path="/login"
+        element={
+          user ? <Navigate to="/dashboard" replace /> : <Login />
+        }
+      />
+
+      {/* Protected Routes */}
       <Route
         path="/"
         element={
@@ -31,18 +57,21 @@ function App() {
           </ProtectedRoute>
         }
       >
+        <Route index element={<Navigate to="/dashboard" replace />} />
+
         <Route path="dashboard" element={<Dashboard />} />
-        {/* baaki pages (Leads, Customers, etc.) baad me yahan add karenge */}
         <Route path="leads" element={<Leads />} />
-        <Route path="customers" element={<Customers />} />
-        <Route path="followups" element={<FollowUps />} />
         <Route path="orders" element={<Orders />} />
+        <Route path="customers" element={<Customers />} />
         <Route path="products" element={<Products />} />
         <Route path="employees" element={<Employees />} />
         <Route path="reports" element={<Reports />} />
         <Route path="profile" element={<Profile />} />
         <Route path="settings" element={<Settings />} />
       </Route>
+
+      {/* Unknown URL */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 }

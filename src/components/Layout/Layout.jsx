@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import "../../styles/layout.css";
 
 function Layout() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
+    <div className="layout-container">
+
       {/* Sidebar */}
       <Sidebar
         isOpen={isOpen}
@@ -15,16 +17,16 @@ function Layout() {
       />
 
       {/* Main Content */}
-      <div className="flex flex-col flex-1 lg:ml-64">
+      <div className="layout-main">
+
         {/* Header */}
-        <Header
-          onMenuClick={() => setIsOpen(true)}
-        />
+        <Header onMenuClick={() => setIsOpen(true)} />
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="layout-content">
           <Outlet />
         </main>
+
       </div>
     </div>
   );

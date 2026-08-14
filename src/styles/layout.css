@@ -1,1 +1,84 @@
-/* Layout Styles */
+/* ========================
+   MAIN LAYOUT STYLES
+======================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f3f4f6;
+}
+
+.layout-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+}
+
+.layout-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-left: 230px;
+  min-height: 100vh;
+  min-width: 0;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.layout-content {
+  flex: 1;
+  padding: 18px;
+  overflow-y: auto;
+  background-color: #f3f4f6;
+}
+
+@media (max-width: 1024px) {
+  .layout-main {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .layout-content {
+    padding: 16px;
+  }
+}
+/* ========================
+   HIDE SCROLLBARS
+======================== */
+
+/* Layout content scrollbar hide */
+.layout-content::-webkit-scrollbar {
+  display: none;
+}
+
+.layout-content {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;      /* Firefox */
+}
+
+/* Sidebar scrollbar hide */
+.sidebar::-webkit-scrollbar,
+.sidebar-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar,
+.sidebar-menu {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Body scrollbar hide */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

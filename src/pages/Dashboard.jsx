@@ -1,10 +1,7 @@
+import "../styles/dashboard.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/common/Button";
-import Input from "../components/common/Input";
-import StatusBadge from "../components/common/StatusBadge";
 import { getDashboardOverview } from "../services/dashboardService";
-import { globalSearch } from "../services/searchService";
 import { getEmployees } from "../services/userService";
 import { useAuth } from "../context/AuthContext";
 import {
@@ -17,19 +14,58 @@ import {
   ShoppingCart,
   IndianRupee,
   TrendingUp,
+  DollarSign,
 } from "lucide-react";
 
+// ============================================
+// 🎨 STATUS COLORS (Predefined for known statuses)
+// ============================================
 const STATUS_COLORS = {
-  New: "#3b82f6",
-  Contacted: "#f59e0b",
-  "Proposal Sent": "#a855f7",
-  Negotiation: "#f97316",
-  Converted: "#22c55e",
-  Lost: "#ef4444",
+  // Lead statuses
+  New: "#3b82f6",              // Blue
+  Contacted: "#f59e0b",        // Amber
+  "Proposal Sent": "#a855f7",  // Purple
+  Negotiation: "#f97316",      // Orange
+  "Order Done": "#22c55e",     // Green (renamed from Converted)
+  Converted: "#22c55e",        // Backward compatibility
+  Lost: "#ef4444",             // Red
+  "Follow-up": "#eab308",      // Yellow
+  Interested: "#06b6d4",       // Cyan
+  NPC: "#94a3b8",              // Gray
+
+  // Order statuses
   Pending: "#f59e0b",
   Processing: "#3b82f6",
+  "In Transit": "#0ea5e9",
+  "Out for Delivery": "#8b5cf6",
+  Pickup: "#eab308",
+  Shipped: "#06b6d4",
+  Delivered: "#22c55e",
   Completed: "#22c55e",
   Cancelled: "#ef4444",
+};
+
+// ============================================
+// 🎨 DYNAMIC COLOR PALETTE
+// Agar koi status COLORS me nahi mila to auto assign hoga
+// ============================================
+const DYNAMIC_COLORS = [
+  "#6366f1", "#ec4899", "#14b8a6", "#f43f5e", "#8b5cf6",
+  "#10b981", "#f59e0b", "#3b82f6", "#a855f7", "#06b6d4",
+  "#84cc16", "#f97316", "#0ea5e9", "#d946ef", "#22c55e",
+];
+
+// Hash function - same status = same color always
+const getColorForStatus = (status) => {
+  if (STATUS_COLORS[status]) return STATUS_COLORS[status];
+  
+  // Hash based on status string
+  let hash = 0;
+  for (let i = 0; i < status.length; i++) {
+    hash = status.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % DYNAMIC_COLORS.length;
+  return DYNAMIC_COLORS[index];
 };
 
 function Dashboard() {
@@ -39,13 +75,8 @@ function Dashboard() {
 
   const [data, setData] = useState(null);
   const [employees, setEmployees] = useState([]);
-  const [selectedEmployee, setSelectedEmployee] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [showResults, setShowResults] = useState(false);
-  const [searchLoading, setSearchLoading] = useState(false);
 
   useEffect(() => {
     fetchDashboard();
@@ -73,215 +104,268 @@ function Dashboard() {
     }
   };
 
-  const handleEmployeeChange = (e) => {
-    const empId = e.target.value;
-    setSelectedEmployee(empId);
-    fetchDashboard(empId);
-  };
-  const handleSearch = async (value) => {
-    setSearchTerm(value);
+  if (loading) return <p className="dashboard-loading">Loading dashboard...</p>;
+  if (error) return <p className="dashboard-error">{error}</p>;
 
-    if (!value.trim()) {
-      setSearchResults([]);
-      setShowResults(false);
-      return;
+  // ============================================
+  // 📅 CURRENT MONTH INFO
+  // ============================================
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+                      "July", "August", "September", "October", "November", "December"];
+  const now = new Date();
+  const currentMonthIndex = now.getMonth();
+  const currentYear = now.getFullYear();
+  const currentMonthName = monthNames[currentMonthIndex];
+  const daysInCurrentMonth = new Date(currentYear, currentMonthIndex + 1, 0).getDate();
+
+  // ============================================
+  // 📊 REVENUE TREND — CURRENT MONTH DAILY DATA
+  // ============================================
+  const buildCurrentMonthData = () => {
+    const dailyMap = {};
+
+    // Har din ka slot banao (1 se 31 tak)
+    for (let day = 1; day <= daysInCurrentMonth; day++) {
+      dailyMap[day] = 0;
     }
 
-    try {
-      setSearchLoading(true);
-
-      const res = await globalSearch(value);
-
-      const results = [
-        ...res.data.leads.map((item) => ({
-          ...item,
-          type: "Lead",
-        })),
-        ...res.data.customers.map((item) => ({
-          ...item,
-          type: "Customer",
-        })),
-      ];
-
-      setSearchResults(results);
-      setShowResults(true);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setSearchLoading(false);
+    // revenueTrend me se sirf current month ke data lo
+    // Backend agar daily data deta hai to use karo, warna monthly data se latest month lo
+    if (data.revenueTrend && data.revenueTrend.length > 0) {
+      data.revenueTrend.forEach((item) => {
+        // Agar backend day-wise data bhejta hai
+        if (item._id.day && item._id.month === currentMonthIndex + 1 && item._id.year === currentYear) {
+          dailyMap[item._id.day] = item.total;
+        }
+        // Agar backend month-wise deta hai to current month ka total distribute na karo
+        // Simply latest month ke daily orders se calculate karo (fallback)
+      });
     }
-  };
-  if (loading) return <p className="p-6">Loading dashboard...</p>;
-  if (error) return <p className="p-6 text-red-500">{error}</p>;
 
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const revenueChartData = data.revenueTrend.map((item) => ({
-    month: monthNames[item._id.month - 1],
-    revenue: item.total,
+    // Agar backend se daily data nahi mila, to recentOrders se banao
+    const hasAnyDailyData = Object.values(dailyMap).some(v => v > 0);
+    if (!hasAnyDailyData && data.recentOrders) {
+      data.recentOrders.forEach((order) => {
+        if (!order.createdAt) return;
+        const orderDate = new Date(order.createdAt);
+        if (orderDate.getMonth() === currentMonthIndex && 
+            orderDate.getFullYear() === currentYear) {
+          const day = orderDate.getDate();
+          dailyMap[day] = (dailyMap[day] || 0) + (Number(order.amount) || 0);
+        }
+      });
+    }
+
+    return Object.entries(dailyMap).map(([day, revenue]) => ({
+      day: day.padStart(2, "0"),
+      revenue,
+    }));
+  };
+
+  const revenueChartData = buildCurrentMonthData();
+
+  // ============================================
+  // 🎨 LEAD ANALYTICS DATA (with rename)
+  // "Converted" → "Order Done"
+  // ============================================
+  const leadAnalyticsData = (data.leadsByStatus || []).map((entry) => ({
+    ...entry,
+    _id: entry._id === "Converted" ? "Order Done" : entry._id,
   }));
 
-    return (
-  <div className="min-h-screen bg-slate-100 p-6">
+  return (
+    <div className="dashboard-page">
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+      {/* ================ STATS CARDS ================ */}
+      <div className="dashboard-cards">
 
         {/* Total Leads */}
-        <div className="bg-white rounded-2xl shadow-md border p-6 min-h-[140px] hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-          <div className="flex justify-between items-center">
-
-            <div>
-              <p className="text-gray-500 text-sm">
-                Total Leads
-              </p>
-
-              <h2 className="text-4xl font-bold mt-2 text-gray-800">
-                {data.totalLeads}
-              </h2>
-
-              <p className="text-green-600 text-sm mt-3 flex items-center gap-1">
+        <div className="dashboard-card">
+          <div className="card-top">
+            <div className="card-left">
+              <p className="card-title">Total Leads</p>
+              <h2 className="card-number">{data.totalLeads}</h2>
+              <p className="card-info green">
                 <TrendingUp size={16} />
-                +12% this month
+                Active Leads
               </p>
             </div>
-
-            <div className="bg-blue-100 p-4 rounded-xl">
-              <Users className="text-blue-600" size={32} />
+            <div className="icon-box blue">
+              <Users size={28} />
             </div>
-
           </div>
         </div>
 
         {/* Total Customers */}
-        <div className="bg-white rounded-2xl shadow-md border p-6 min-h-[140px] hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-          <div className="flex justify-between items-center">
-
-            <div>
-              <p className="text-gray-500 text-sm">
-                Total Customers
-              </p>
-
-              <h2 className="text-4xl font-bold mt-2 text-gray-800">
-                {data.totalCustomers}
-              </h2>
-
-              <p className="text-green-600 text-sm mt-3 flex items-center gap-1">
+        <div className="dashboard-card">
+          <div className="card-top">
+            <div className="card-left">
+              <p className="card-title">Total Customers</p>
+              <h2 className="card-number">{data.totalCustomers}</h2>
+              <p className="card-info green">
                 <TrendingUp size={16} />
                 Active Customers
               </p>
             </div>
-
-            <div className="bg-green-100 p-4 rounded-xl">
-              <UserCheck className="text-green-600" size={32} />
+            <div className="icon-box green">
+              <UserCheck size={28} />
             </div>
-
           </div>
         </div>
 
         {/* Total Orders */}
-        <div className="bg-white rounded-2xl shadow-md border p-6 min-h-[140px] hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-          <div className="flex justify-between items-center">
-
-            <div>
-              <p className="text-gray-500 text-sm">
-                Total Orders
-              </p>
-
-              <h2 className="text-4xl font-bold mt-2 text-gray-800">
-                {data.totalOrders}
-              </h2>
-
-              <p className="text-blue-600 text-sm mt-3 flex items-center gap-1">
+        <div className="dashboard-card">
+          <div className="card-top">
+            <div className="card-left">
+              <p className="card-title">Total Orders</p>
+              <h2 className="card-number">{data.totalOrders}</h2>
+              <p className="card-info purple">
                 <ShoppingCart size={16} />
                 Orders Received
               </p>
             </div>
-
-            <div className="bg-purple-100 p-4 rounded-xl">
-              <ShoppingCart className="text-purple-600" size={32} />
+            <div className="icon-box purple">
+              <ShoppingCart size={28} />
             </div>
-
           </div>
         </div>
 
         {/* Revenue */}
-        <div className="bg-white rounded-2xl shadow-md border p-6 min-h-[140px] hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-          <div className="flex justify-between items-center">
-
-            <div>
-              <p className="text-gray-500 text-sm">
-                Revenue
-              </p>
-
-              <h2 className="text-3xl font-bold mt-2 text-gray-800">
-                ₹{data.revenue.toLocaleString()}
-              </h2>
-
-              <p className="text-orange-600 text-sm mt-3 flex items-center gap-1">
+        <div className="dashboard-card">
+          <div className="card-top">
+            <div className="card-left">
+              <p className="card-title">Revenue</p>
+              <h2 className="card-number">₹{(data.revenue || 0).toLocaleString()}</h2>
+              <p className="card-info orange">
                 <IndianRupee size={16} />
-                Total Revenue
+                Delivered Order
               </p>
             </div>
-
-            <div className="bg-orange-100 p-4 rounded-xl">
-              <IndianRupee className="text-orange-600" size={32} />
+            <div className="icon-box orange">
+              <IndianRupee size={28} />
             </div>
+          </div>
+        </div>
 
+        {/* Total Sales */}
+        <div className="dashboard-card">
+          <div className="card-top">
+            <div className="card-left">
+              <p className="card-title">Total Sales</p>
+              <h2 className="card-number">₹{(data.totalSales || 0).toLocaleString()}</h2>
+              <p className="card-info green">
+                <TrendingUp size={16} />
+                All Orders
+              </p>
+            </div>
+            <div className="icon-box green">
+              <DollarSign size={28} />
+            </div>
           </div>
         </div>
 
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow p-5">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Revenue Trend (6 months)</h3>
-          <ResponsiveContainer width="100%" height={250}>
+      {/* ================ CHARTS SECTION ================ */}
+      <div className="chart-grid">
+
+        {/* ================ REVENUE TREND ================ */}
+        <div className="chart-card">
+          <div className="card-header">
+            <h3>Revenue Trend</h3>
+            <span>{currentMonthName} {currentYear}</span>
+          </div>
+          <ResponsiveContainer width="100%" height={220}>
             <LineChart data={revenueChartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
+              <XAxis 
+                dataKey="day" 
+                stroke="#94a3b8"
+                tick={{ fill: '#94a3b8', fontSize: 11 }}
+                interval={2}
+              />
+              <YAxis 
+                stroke="#94a3b8"
+                tick={{ fill: '#94a3b8', fontSize: 11 }}
+              />
+              <Tooltip
+                contentStyle={{
+                  background: '#1e293b',
+                  border: '1px solid #334155',
+                  borderRadius: '8px',
+                  color: '#f1f5f9',
+                }}
+                formatter={(value) => [`₹${value.toLocaleString()}`, 'Revenue']}
+                labelFormatter={(day) => `${currentMonthName} ${day}`}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="revenue" 
+                stroke="#6366f1" 
+                strokeWidth={3} 
+                dot={{ r: 4, fill: '#6366f1' }}
+                activeDot={{ r: 6, fill: '#8b5cf6' }}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-5">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Leads by Status <span className="text-xs text-gray-400 font-normal">(click a slice)</span>
-          </h3>
-          <ResponsiveContainer width="100%" height={250}>
+        {/* ================ LEAD ANALYTICS ================ */}
+        <div className="chart-card">
+          <div className="card-header">
+            <h3>Lead Analytics</h3>
+            <span>Click to Filter</span>
+          </div>
+          <ResponsiveContainer width="100%" height={220}>
             <PieChart>
               <Pie
-                data={data.leadsByStatus}
+                data={leadAnalyticsData}
                 dataKey="count"
                 nameKey="_id"
                 innerRadius={60}
                 outerRadius={90}
                 paddingAngle={3}
               >
-                {data.leadsByStatus.map((entry, index) => (
+                {leadAnalyticsData.map((entry, index) => (
                   <Cell
                     key={index}
-                    fill={STATUS_COLORS[entry._id] || "#999"}
-                    onClick={() => navigate(`/leads?status=${entry._id}`)}
+                    fill={getColorForStatus(entry._id)}
+                    onClick={() => navigate(`/leads?status=${entry._id === "Order Done" ? "Converted" : entry._id}`)}
                     style={{ cursor: "pointer" }}
                   />
                 ))}
               </Pie>
-              <Tooltip />
-              <Legend />
+              <Tooltip
+                contentStyle={{
+                  background: '#1e293b',
+                  border: '1px solid #334155',
+                  borderRadius: '8px',
+                  color: '#f1f5f9',
+                }}
+                formatter={(value, name) => [`${value} leads`, name]}
+              />
+              <Legend 
+                iconType="circle"
+                formatter={(value) => (
+                  <span style={{ color: 'inherit', fontSize: '13px' }}>{value}</span>
+                )}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
+
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* ================ BOTTOM SECTION ================ */}
+      <div className="bottom-grid">
 
-        <div className="bg-white rounded-xl shadow p-5">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Orders by Status <span className="text-xs text-gray-400 font-normal">(click a row)</span>
-          </h3>
-          <div className="space-y-3">
+        {/* Orders Overview */}
+        <div className="dashboard-box">
+          <div className="card-header">
+            <h3>Orders Overview</h3>
+            <span>Live Status</span>
+          </div>
+          <div className="order-list">
             {data.ordersByStatus.map((item) => {
               const total = data.ordersByStatus.reduce((sum, o) => sum + o.count, 0);
               const percent = total > 0 ? ((item.count / total) * 100).toFixed(0) : 0;
@@ -289,16 +373,19 @@ function Dashboard() {
                 <div
                   key={item._id}
                   onClick={() => navigate(`/orders?status=${item._id}`)}
-                  className="cursor-pointer hover:bg-gray-50 p-1 rounded-lg transition-colors"
+                  className="order-item"
                 >
-                  <div className="flex justify-between text-sm text-gray-600 mb-1">
-                    <span>{item._id}</span>
-                    <span>{item.count} ({percent}%)</span>
+                  <div className="order-row">
+                    <span className="order-status-name">{item._id}</span>
+                    <span className="order-count">{item.count} ({percent}%)</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="progress-bar">
                     <div
-                      className="h-2 rounded-full"
-                      style={{ width: `${percent}%`, backgroundColor: STATUS_COLORS[item._id] || "#999" }}
+                      className="progress-fill"
+                      style={{
+                        width: `${percent}%`,
+                        backgroundColor: getColorForStatus(item._id),
+                      }}
                     ></div>
                   </div>
                 </div>
@@ -307,64 +394,87 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-5">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Leads</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+        {/* Recent Leads */}
+        <div className="dashboard-box">
+          <div className="card-header">
+            <h3>Recent Leads</h3>
+            <span>Latest Entries</span>
+          </div>
+          <div className="table-wrapper">
+            <table className="dashboard-table">
               <thead>
-                <tr className="text-left text-gray-500 border-b">
-                  <th className="py-2 pr-2">Name</th>
-                  <th className="py-2 pr-2">Status</th>
+                <tr>
+                  <th>Name</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                {data.recentLeads.map((lead) => (
-                  <tr key={lead._id} className="border-b last:border-0">
-                    <td className="py-2 pr-2 font-medium text-gray-800">{lead.name}</td>
-                    <td className="py-2 pr-2">
-                      <span
-                        className="px-2 py-1 rounded-full text-xs font-medium"
-                        style={{ backgroundColor: `${STATUS_COLORS[lead.status]}20`, color: STATUS_COLORS[lead.status] }}
-                      >
-                        {lead.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                {data.recentLeads.map((lead) => {
+                  const displayStatus = lead.status === "Converted" ? "Order Done" : lead.status;
+                  const color = getColorForStatus(displayStatus);
+                  return (
+                    <tr key={lead._id}>
+                      <td className="lead-name">{lead.name}</td>
+                      <td>
+                        <span
+                          className="status-badge"
+                          style={{
+                            backgroundColor: `${color}20`,
+                            color: color,
+                          }}
+                        >
+                          {displayStatus}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-5">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Orders</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+        {/* Recent Orders */}
+        <div className="dashboard-box">
+          <div className="card-header">
+            <h3>Recent Orders</h3>
+            <span>Latest Orders</span>
+          </div>
+          <div className="table-wrapper">
+            <table className="dashboard-table">
               <thead>
-                <tr className="text-left text-gray-500 border-b">
-                  <th className="py-2 pr-2">Customer</th>
-                  <th className="py-2 pr-2">Status</th>
+                <tr>
+                  <th>Customer</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                {data.recentOrders.map((order) => (
-                  <tr key={order._id} className="border-b last:border-0">
-                    <td className="py-2 pr-2 font-medium text-gray-800">{order.customer?.name || "—"}</td>
-                    <td className="py-2 pr-2">
-                      <span
-                        className="px-2 py-1 rounded-full text-xs font-medium"
-                        style={{ backgroundColor: `${STATUS_COLORS[order.status]}20`, color: STATUS_COLORS[order.status] }}
-                      >
-                        {order.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                {data.recentOrders.map((order) => {
+                  const color = getColorForStatus(order.status);
+                  return (
+                    <tr key={order._id}>
+                      <td className="customer-name">{order.customer?.name || "—"}</td>
+                      <td>
+                        <span
+                          className="status-badge"
+                          style={{
+                            backgroundColor: `${color}20`,
+                            color: color,
+                          }}
+                        >
+                          {order.status}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </div>
+
       </div>
+
     </div>
   );
 }

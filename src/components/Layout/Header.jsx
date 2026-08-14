@@ -1,20 +1,23 @@
 import {
   Bell,
   Moon,
+  Sun,
   Menu,
   ChevronDown,
   Search,
 } from "lucide-react";
 
+import "../../styles/header.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { globalSearch } from "../../services/searchService";
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
 
 function Header({ onMenuClick }) {
   const { user } = useAuth();
   const navigate = useNavigate();
-
+  const { theme, toggleTheme } = useTheme();
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -53,157 +56,159 @@ function Header({ onMenuClick }) {
   };
 
   return (
-    <header className="sticky top-0 z-20 h-[70px] bg-white border-b border-gray-200 flex items-center justify-between px-6">
+    <header className="header">
 
       {/* Left */}
-      <div className="flex items-center gap-4">
+      <div className="header-left">
 
         {/* Mobile Menu */}
         <button
           onClick={onMenuClick}
-          className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
+          className="menu-btn"
         >
           <Menu size={22} />
         </button>
 
         {/* Page Title */}
-        <div>
-          <h1 className="text-xl lg:text-2xl font-bold text-gray-800">
-            Dashboard
-          </h1>
+        <div className="page-title">
 
-          <p className="text-xs text-gray-500 hidden md:block">
-            Welcome back 👋
-          </p>
+          <h1>Dashboard</h1>
+
+          <p>Welcome Back 👋</p>
+
         </div>
 
       </div>
       {/* Global Search */}
-      <div className="hidden lg:flex flex-1 justify-center px-8">
+      <div className="header-search">
 
-        <div className="relative w-full max-w-2xl">
-  <div className="flex items-center h-12 rounded-2xl border border-gray-300 bg-white px-4 shadow-sm">
+        <div className="search-box">
+          <div className="search-input">
 
-    <Search
-      size={20}
-      className="text-gray-400 flex-shrink-0"
-    />
+            <Search
+              size={20}
+              className="search-icon"
+            />
 
-    <input
-      type="text"
-      value={searchTerm}
-      onChange={(e) => handleSearch(e.target.value)}
-      placeholder="Search Leads, Customers, Orders, Products..."
-      className="flex-1 ml-3 border-none outline-none bg-transparent text-gray-700 placeholder:text-gray-400"
-      style={{
-        padding: 0,
-        margin: 0,
-        lineHeight: "20px",
-      }}
-    />
-  </div>
-
-  {loading && (
-    <div className="absolute left-0 right-0 mt-2 bg-white shadow-lg rounded-xl border p-3 z-50">
-      Searching...
-    </div>
-  )}
-
-  {showResults && (
-    <div className="absolute left-0 right-0 mt-2 bg-white shadow-xl rounded-xl border z-50 max-h-80 overflow-y-auto">
-      {results.length === 0 ? (
-        <div className="p-4 text-center text-gray-500">
-          No results found
-        </div>
-      ) : (
-        results.map((item) => (
-          <div
-            key={item._id}
-            onClick={() => {
-              setShowResults(false);
-
-              switch (item.type) {
-                case "Lead":
-                  navigate(`/leads?edit=${item._id}`);
-                  break;
-                case "Customer":
-                  navigate(`/customers?edit=${item._id}`);
-                  break;
-                case "Order":
-                  navigate(`/orders?edit=${item._id}`);
-                  break;
-                case "FollowUp":
-                  navigate(`/followups?edit=${item._id}`);
-                  break;
-                case "Product":
-                  navigate(`/products?edit=${item._id}`);
-                  break;
-                case "Employee":
-                  navigate(`/employees?edit=${item._id}`);
-                  break;
-                default:
-                  break;
-              }
-            }}
-            className="flex items-center justify-between px-4 py-3 hover:bg-blue-50 cursor-pointer border-b last:border-b-0"
-          >
-            <div className="font-medium">
-              {item.name ||
-                item.customer?.name ||
-                item.lead?.name ||
-                item.note ||
-                "Untitled"}
-            </div>
-
-            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-              {item.type}
-            </span>
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder="Search Leads, Customers, Orders..."
+              className="search-field"
+            />
           </div>
-        ))
-      )}
-    </div>
-  )}
-</div>
+
+          {loading && (
+            <div className="search-loading">
+              Searching...
+            </div>
+          )}
+
+          {showResults && (
+            <div className="search-results">
+              {results.length === 0 ? (
+                <div className="no-results">
+                  No results found
+                </div>
+              ) : (
+                results.map((item) => (
+                  <div
+                    key={item._id}
+                    onClick={() => {
+                      setShowResults(false);
+
+                      switch (item.type) {
+                        case "Lead":
+                          navigate(`/leads?edit=${item._id}`);
+                          break;
+                        case "Customer":
+                          navigate(`/customers?edit=${item._id}`);
+                          break;
+                        case "Order":
+                          navigate(`/orders?edit=${item._id}`);
+                          break;
+                        case "FollowUp":
+                          navigate(`/followups?edit=${item._id}`);
+                          break;
+                        case "Product":
+                          navigate(`/products?edit=${item._id}`);
+                          break;
+                        case "Employee":
+                          navigate(`/employees?edit=${item._id}`);
+                          break;
+                        default:
+                          break;
+                      }
+                    }}
+                    className="search-item"
+                  >
+                    <div className="font-medium">
+                      {item.name ||
+                        item.customer?.name ||
+                        item.lead?.name ||
+                        item.note ||
+                        "Untitled"}
+                    </div>
+
+                    <span className="search-badge">
+                      {item.type}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
 
       </div>
 
       {/* Right */}
-      <div className="flex items-center gap-2 lg:gap-4">
+      <div className="header-right">
 
-        <button className="relative p-2 rounded-xl hover:bg-gray-100 transition">
+        {/* <button className="header-icon-btn notification-btn">
 
           <Bell size={20} />
 
-          <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500"></span>
+          <span className="notification-dot"></span>
 
-        </button>
+        </button> */}
 
-        <button className="p-2 rounded-xl hover:bg-gray-100 transition">
-          <Moon size={20} />
+        <button
+          className="header-icon-btn"
+          onClick={toggleTheme}
+          title={theme === "light" ? "Dark Mode" : "Light Mode"}
+        >
+          {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
         </button>
 
         {/* Profile */}
-        <button className="flex items-center gap-3 hover:bg-gray-100 px-2 py-1 rounded-xl transition">
+        <button className="profile-btn"
+          onClick={() => navigate("/profile")}
+        >
 
           <img
             src="https://i.pravatar.cc/100?img=12"
             alt="profile"
-            className="w-10 h-10 rounded-full"
+            className="profile-image"
           />
 
-          <div className="hidden lg:block text-left">
+          <div className="profile-info">
 
-            <h3 className="text-sm font-semibold text-gray-800">
+            <h3 className="profile-name">
               {user?.name || "Shivam Dixit"}
             </h3>
 
-            <p className="text-xs text-gray-500">
+            <p className="profile-role">
               {user?.role || "Administrator"}
             </p>
 
           </div>
 
-          <ChevronDown size={18} />
+          <ChevronDown
+            size={18}
+            className="profile-arrow"
+          />
 
         </button>
 

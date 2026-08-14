@@ -1,0 +1,251 @@
+/* ========================
+   CUSTOMERS PAGE STYLES
+======================== */
+
+.customers-page {
+  padding: 24px;
+  background-color: #f3f4f6;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Loader */
+.customers-loading {
+  padding: 24px;
+  font-size: 16px;
+  color: #555;
+}
+
+/* ================== HEADER ================== */
+.customers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.customers-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.customers-total-badge {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ================== SEARCH CARD ================== */
+.search-card {
+  background-color: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.search-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.search-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ================== BUTTONS ================== */
+.btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  flex: 1;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+.btn-danger {
+  background-color: #dc2626;
+  color: white;
+  flex: 1;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+}
+
+/* ================== ERROR ================== */
+.customers-error {
+  color: #dc2626;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+/* ================== GRID ================== */
+.customers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.customers-empty {
+  color: #6b7280;
+  grid-column: 1 / -1;
+}
+
+/* ================== CUSTOMER CARD ================== */
+.customer-card {
+  background-color: white;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.customer-card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.customer-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.customer-info {
+  font-size: 14px;
+  color: #4b5563;
+  margin-top: 4px;
+}
+
+.customer-address {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* ================== SOURCE BADGE ================== */
+.source-wrapper {
+  margin-top: 12px;
+}
+
+.source-badge {
+  background-color: #dcfce7;
+  color: #15803d;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* ================== ACTIONS ================== */
+.customer-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.customer-actions .btn {
+  flex: 1;
+  padding: 8px 0;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+/* ================== EDIT FORM ================== */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.edit-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* ================== RESPONSIVE ================== */
+@media (max-width: 1024px) {
+  .customers-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .customers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .customers-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

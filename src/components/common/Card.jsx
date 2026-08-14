@@ -1,3 +1,5 @@
+import "../../styles/Card.css";
+
 function Card({
   title,
   subtitle,
@@ -5,28 +7,19 @@ function Card({
   className = "",
 }) {
   return (
-    <div
-      className={`
-        bg-white
-        rounded-2xl
-        shadow-sm
-        border
-        border-gray-200
-        p-5
-        ${className}
-      `}
-    >
+    <div className={`card ${className}`}>
+
       {(title || subtitle) && (
-        <div className="mb-4">
+        <div className="card-header">
 
           {title && (
-            <h2 className="text-lg font-semibold text-gray-800">
+            <h2 className="card-title">
               {title}
             </h2>
           )}
 
           {subtitle && (
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="card-subtitle">
               {subtitle}
             </p>
           )}
@@ -34,7 +27,10 @@ function Card({
         </div>
       )}
 
-      {children}
+      <div className="card-body">
+        {children}
+      </div>
+
     </div>
   );
 }

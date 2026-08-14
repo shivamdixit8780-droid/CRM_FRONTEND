@@ -1,16 +1,26 @@
+// src/context/AuthContext.jsx
 import { createContext, useState, useContext } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  // ✅ loading state add ki
+  const [loading, setLoading] = useState(true);
+
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem('user');
 
-    if (!storedUser || storedUser === "undefined") return null;
+    if (!storedUser || storedUser === "undefined") {
+      setLoading(false); // ✅ loading false karo
+      return null;
+    }
 
     try {
-      return JSON.parse(storedUser);
+      const parsedUser = JSON.parse(storedUser);
+      setLoading(false); // ✅ loading false karo
+      return parsedUser;
     } catch (err) {
+      setLoading(false); // ✅ loading false karo
       return null;
     }
   });
@@ -27,8 +37,9 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // ✅ loading bhi provide karo
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

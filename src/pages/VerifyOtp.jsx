@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
+import "../styles/verifyOtp.css";
 
 function VerifyOtp() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Register page se bheja gaya email yahan milega
   const email = location.state?.email || "";
 
   const [otp, setOtp] = useState("");
@@ -22,13 +22,8 @@ function VerifyOtp() {
     setLoading(true);
 
     try {
-      const res = await api.post("/auth/verify-otp", { email, otp });
-
-      console.log(res.data);
-
-      // OTP verify ho gaya -> ab Login page pe bhej do
+      await api.post("/auth/verify-otp", { email, otp });
       navigate("/login");
-
     } catch (err) {
       setError(err.response?.data?.message || "Invalid OTP, try again");
     } finally {
@@ -52,33 +47,51 @@ function VerifyOtp() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "50px auto" }}>
-      <h2>Verify OTP</h2>
-      <p>OTP bheja gaya hai: <b>{email}</b> par</p>
+    <div className="verify-page">
+      <div className="verify-bg-shape shape-1"></div>
+      <div className="verify-bg-shape shape-2"></div>
+      <div className="verify-bg-shape shape-3"></div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "green" }}>{message}</p>}
+      <div className="verify-card">
+        <div className="verify-header">
+          <div className="verify-icon">🔐</div>
+          <h2>Verify OTP</h2>
+          <p>
+            OTP bheja gaya hai <span>{email || "your email"}</span> par
+          </p>
+        </div>
 
-      <form onSubmit={handleVerify}>
-        <input
-          type="text"
-          placeholder="Enter OTP"
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
-          required
-        />
-        <br /><br />
+        {error && <div className="verify-alert error">⚠️ {error}</div>}
+        {message && <div className="verify-alert success">✅ {message}</div>}
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Verifying..." : "Verify OTP"}
+        <form onSubmit={handleVerify} className="verify-form">
+          <label>Enter OTP</label>
+          <input
+            type="text"
+            placeholder="Enter 6-digit OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            maxLength={6}
+            required
+          />
+
+          <button type="submit" className="verify-btn" disabled={loading}>
+            {loading ? "Verifying..." : "Verify OTP"}
+          </button>
+        </form>
+
+        <button
+          onClick={handleResend}
+          className="resend-btn"
+          disabled={resending}
+        >
+          {resending ? "Resending..." : "Resend OTP"}
         </button>
-      </form>
 
-      <br />
-
-      <button onClick={handleResend} disabled={resending}>
-        {resending ? "Resending..." : "Resend OTP"}
-      </button>
+        <div className="verify-footer">
+          <Link to="/login">← Back to Login</Link>
+        </div>
+      </div>
     </div>
   );
 }

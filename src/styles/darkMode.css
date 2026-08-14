@@ -1,0 +1,1640 @@
+/* ============================================
+   🌙 GLOBAL DARK MODE — COMPLETE CRM
+   ============================================ */
+
+/* ============================================
+   BODY & GLOBAL BASE
+   ============================================ */
+
+body[data-theme="dark"] {
+  background: #0a0e1a !important;
+  color: #e2e8f0;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+body[data-theme="dark"] * {
+  scrollbar-color: #334155 #0a0e1a;
+}
+
+/* Custom Scrollbar */
+body[data-theme="dark"] ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+body[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #0a0e1a;
+}
+
+body[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
+body[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ============================================
+   LAYOUT — Sidebar & Header
+   ============================================ */
+
+body[data-theme="dark"] .sidebar,
+body[data-theme="dark"] aside {
+  background: #0f172a;
+  border-right: 1px solid #334155;
+}
+
+body[data-theme="dark"] .sidebar-logo,
+body[data-theme="dark"] .sidebar-bottom {
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .logo-title,
+body[data-theme="dark"] .user-name {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .logo-subtitle,
+body[data-theme="dark"] .user-role {
+  color: #94a3b8;
+}
+
+body[data-theme="dark"] .sidebar-link {
+  color: #cbd5e1;
+}
+
+body[data-theme="dark"] .sidebar-link:hover {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .sidebar-link.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+}
+
+body[data-theme="dark"] .sidebar-user {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+/* Header / Topbar */
+body[data-theme="dark"] .header,
+body[data-theme="dark"] .topbar,
+body[data-theme="dark"] .navbar,
+body[data-theme="dark"] header {
+  background: #0f172a;
+  border-bottom: 1px solid #334155;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .header input,
+body[data-theme="dark"] .topbar input,
+body[data-theme="dark"] .navbar input {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .header input::placeholder {
+  color: #64748b;
+}
+
+/* Main Layout */
+body[data-theme="dark"] main,
+body[data-theme="dark"] .main-content,
+body[data-theme="dark"] .layout-content {
+  background: #0a0e1a;
+}
+
+/* ============================================
+   DASHBOARD
+   ============================================ */
+
+body[data-theme="dark"] .dashboard-page,
+body[data-theme="dark"] .dashboard,
+body[data-theme="dark"] .dashboard-container {
+  background: transparent;
+  color: #e2e8f0;
+}
+
+body[data-theme="dark"] .dashboard h1,
+body[data-theme="dark"] .dashboard h2,
+body[data-theme="dark"] .dashboard-title {
+  color: #f1f5f9;
+}
+
+/* Stat Cards */
+body[data-theme="dark"] .stat-card,
+body[data-theme="dark"] .metric-card,
+body[data-theme="dark"] .kpi-card {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border: 1px solid #334155;
+  color: #f1f5f9;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body[data-theme="dark"] .stat-card:hover {
+  border-color: #6366f1;
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.2);
+}
+
+body[data-theme="dark"] .stat-value,
+body[data-theme="dark"] .stat-number {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .stat-label {
+  color: #94a3b8;
+}
+
+/* Chart Containers */
+body[data-theme="dark"] .chart-container,
+body[data-theme="dark"] .chart-card {
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #f1f5f9;
+}
+
+/* ============================================
+   LEADS / ORDERS / CUSTOMERS PAGES
+   ============================================ */
+
+body[data-theme="dark"] .leads-page,
+body[data-theme="dark"] .orders-page,
+body[data-theme="dark"] .customers-page {
+  background: transparent;
+  color: #e2e8f0;
+}
+
+body[data-theme="dark"] .leads-title,
+body[data-theme="dark"] .orders-title,
+body[data-theme="dark"] .customers-title,
+body[data-theme="dark"] .page-title {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .orders-subtitle,
+body[data-theme="dark"] .page-subtitle {
+  color: #94a3b8;
+}
+
+/* Search Bar */
+body[data-theme="dark"] .search-input {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .search-input::placeholder {
+  color: #64748b;
+}
+
+body[data-theme="dark"] .search-input:focus {
+  border-color: #6366f1;
+  background: #0f172a;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Buttons */
+body[data-theme="dark"] .btn-secondary {
+  background: #334155;
+  color: #e2e8f0;
+  border: 1px solid #475569;
+}
+
+body[data-theme="dark"] .btn-secondary:hover {
+  background: #475569;
+}
+
+/* Date Filter Bar */
+body[data-theme="dark"] .date-filter-bar {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .date-field label {
+  color: #94a3b8;
+}
+
+body[data-theme="dark"] .date-field .form-input,
+body[data-theme="dark"] .form-input {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .form-input:focus {
+  border-color: #6366f1;
+  background: #0f172a;
+}
+
+body[data-theme="dark"] .form-input::placeholder {
+  color: #64748b;
+}
+
+body[data-theme="dark"] .filter-count {
+  background: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+}
+
+/* Filter Buttons */
+body[data-theme="dark"] .filter-buttons-full {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .filter-btn-full {
+  background: #1e293b;
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+body[data-theme="dark"] .filter-btn-full:hover {
+  background: #334155;
+  border-color: #64748b;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .filter-btn-full.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+/* ============================================
+   CARDS (Lead / Order / Customer)
+   ============================================ */
+
+body[data-theme="dark"] .lead-card-new {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border-color: #334155;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body[data-theme="dark"] .lead-card-new:hover {
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
+  border-color: #6366f1;
+}
+
+body[data-theme="dark"] .lead-card-new::before {
+  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+}
+
+body[data-theme="dark"] .lead-card-left {
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .lead-card-name {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .lead-id-tag {
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(167, 139, 250, 0.4);
+}
+
+body[data-theme="dark"] .lead-id-tag.copied {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+/* Info Boxes */
+body[data-theme="dark"] .info-box {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .info-box:hover {
+  background: #1a2540;
+  border-color: #475569;
+}
+
+body[data-theme="dark"] .info-value {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .info-label {
+  color: #94a3b8;
+}
+
+/* Info Icons — brighter dark backgrounds */
+body[data-theme="dark"] .icon-phone { background: #7f1d1d; }
+body[data-theme="dark"] .icon-product { background: #78350f; }
+body[data-theme="dark"] .icon-money { background: #14532d; }
+body[data-theme="dark"] .icon-location { background: #831843; }
+body[data-theme="dark"] .icon-calendar { background: #713f12; }
+
+body[data-theme="dark"] .info-box.interested-date-box {
+  background: linear-gradient(135deg, #78350f, #92400e);
+  border-color: #a16207;
+}
+
+body[data-theme="dark"] .info-box.interested-date-box .info-value {
+  color: #fef3c7;
+}
+
+body[data-theme="dark"] .card-actions-new {
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .btn-action-view {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+body[data-theme="dark"] .btn-action-view:hover {
+  background: #475569 !important;
+}
+
+/* Status Badges */
+body[data-theme="dark"] .lead-status-dot {
+  filter: brightness(1.15);
+}
+
+/* ============================================
+   FORMS (Add/Edit)
+   ============================================ */
+
+body[data-theme="dark"] .lead-form,
+body[data-theme="dark"] .lead-form-narrow,
+body[data-theme="dark"] form {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .form-title {
+  color: #93c5fd;
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .input-label,
+body[data-theme="dark"] label {
+  color: #94a3b8;
+}
+
+body[data-theme="dark"] .input-label small {
+  color: #64748b;
+}
+
+body[data-theme="dark"] input,
+body[data-theme="dark"] select,
+body[data-theme="dark"] textarea {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] input:focus,
+body[data-theme="dark"] select:focus,
+body[data-theme="dark"] textarea:focus {
+  border-color: #6366f1;
+  background: #0f172a;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  outline: none;
+}
+
+body[data-theme="dark"] input::placeholder,
+body[data-theme="dark"] textarea::placeholder {
+  color: #64748b;
+}
+
+body[data-theme="dark"] select option {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .readonly-input {
+  background: #1e293b !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+}
+
+body[data-theme="dark"] .address-fetched {
+  color: #4ade80;
+}
+
+body[data-theme="dark"] .pincode-loading {
+  color: #a78bfa;
+}
+
+/* ============================================
+   MODALS (Edit / View / Confirm)
+   ============================================ */
+
+body[data-theme="dark"] .edit-overlay,
+body[data-theme="dark"] .modal-overlay,
+body[data-theme="dark"] .logout-modal-overlay {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+body[data-theme="dark"] .edit-full-card,
+body[data-theme="dark"] .modal,
+body[data-theme="dark"] .view-modal,
+body[data-theme="dark"] .logout-modal {
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #f1f5f9;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+body[data-theme="dark"] .edit-full-header,
+body[data-theme="dark"] .modal-header {
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .edit-full-header h3,
+body[data-theme="dark"] .modal h3,
+body[data-theme="dark"] .logout-modal-title {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .edit-close-btn,
+body[data-theme="dark"] .modal-close {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .edit-close-btn:hover {
+  background: #dc2626;
+  color: #fff;
+}
+
+body[data-theme="dark"] .edit-full-actions,
+body[data-theme="dark"] .modal-footer {
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .logout-modal-message {
+  color: #94a3b8;
+}
+
+body[data-theme="dark"] .logout-modal-message strong {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .btn-cancel {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .btn-cancel:hover:not(:disabled) {
+  background: #475569;
+}
+
+/* View Modal Rows */
+body[data-theme="dark"] .view-row {
+  background: #1e293b;
+  border-left-color: #6366f1;
+}
+
+body[data-theme="dark"] .view-row strong {
+  color: #cbd5e1;
+}
+
+body[data-theme="dark"] .view-row span {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .lead-id-tag-small {
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+}
+
+/* ============================================
+   PROFILE PAGE
+   ============================================ */
+
+body[data-theme="dark"] .profile-page {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .profile-title {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .profile-header {
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .profile-card {
+  background: #0f172a;
+  border-color: #334155;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body[data-theme="dark"] .profile-info p,
+body[data-theme="dark"] .readonly-info p {
+  color: #cbd5e1;
+}
+
+body[data-theme="dark"] .profile-info b,
+body[data-theme="dark"] .readonly-info b {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .profile-divider {
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .form-group label {
+  color: #94a3b8;
+}
+
+body[data-theme="dark"] .form-group input,
+body[data-theme="dark"] .form-group select {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+/* ============================================
+   TABLES (Employees / Products / Reports)
+   ============================================ */
+
+body[data-theme="dark"] table {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+body[data-theme="dark"] thead {
+  background: #1e293b;
+}
+
+body[data-theme="dark"] thead th {
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body[data-theme="dark"] tbody tr {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+body[data-theme="dark"] tbody tr:hover {
+  background: #1e293b;
+}
+
+body[data-theme="dark"] tbody td {
+  color: #cbd5e1;
+  border-color: #334155;
+}
+
+/* ============================================
+   AUTH PAGES (Login / Register)
+   ============================================ */
+
+body[data-theme="dark"] .auth-card {
+  background: rgba(15, 23, 42, 0.98);
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .auth-brand {
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .auth-brand-title,
+body[data-theme="dark"] .auth-header h2 {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .auth-brand-subtitle,
+body[data-theme="dark"] .auth-header p,
+body[data-theme="dark"] .auth-switch {
+  color: #94a3b8;
+}
+
+body[data-theme="dark"] .input-group label {
+  color: #cbd5e1;
+}
+
+body[data-theme="dark"] .input-wrapper input {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .input-wrapper input:focus {
+  background: #0f172a;
+  border-color: #6366f1;
+}
+
+body[data-theme="dark"] .auth-divider::before,
+body[data-theme="dark"] .auth-divider::after {
+  background: #334155;
+}
+
+body[data-theme="dark"] .auth-footer {
+  border-color: #334155;
+}
+
+/* ============================================
+   ALERTS / MESSAGES
+   ============================================ */
+
+body[data-theme="dark"] .leads-empty,
+body[data-theme="dark"] .orders-empty,
+body[data-theme="dark"] .customers-empty {
+  color: #64748b;
+}
+
+body[data-theme="dark"] .leads-loading,
+body[data-theme="dark"] .orders-loading,
+body[data-theme="dark"] .customers-loading,
+body[data-theme="dark"] .profile-loading {
+  color: #94a3b8;
+}
+
+body[data-theme="dark"] .leads-error,
+body[data-theme="dark"] .orders-error,
+body[data-theme="dark"] .customers-error,
+body[data-theme="dark"] .error {
+  background: #450a0a;
+  color: #fca5a5;
+  border-color: #7f1d1d;
+}
+
+body[data-theme="dark"] .success {
+  background: #052e16;
+  color: #86efac;
+  border-color: #14532d;
+}
+
+/* ============================================
+   CALL BANNER
+   ============================================ */
+
+body[data-theme="dark"] .call-banner.active {
+  background: linear-gradient(135deg, #065f46, #047857);
+  box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+}
+
+body[data-theme="dark"] .call-banner.ended {
+  background: linear-gradient(135deg, #7f1d1d, #991b1b);
+  box-shadow: 0 10px 40px rgba(220, 38, 38, 0.4);
+}
+
+/* ============================================
+   PRODUCTS / EMPLOYEES / REPORTS PAGES
+   ============================================ */
+
+body[data-theme="dark"] .products-page,
+body[data-theme="dark"] .employees-page,
+body[data-theme="dark"] .reports-page,
+body[data-theme="dark"] .settings-page {
+  color: #e2e8f0;
+}
+
+body[data-theme="dark"] .products-page h1,
+body[data-theme="dark"] .products-page h2,
+body[data-theme="dark"] .employees-page h1,
+body[data-theme="dark"] .employees-page h2,
+body[data-theme="dark"] .reports-page h1,
+body[data-theme="dark"] .reports-page h2,
+body[data-theme="dark"] .settings-page h1,
+body[data-theme="dark"] .settings-page h2 {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .product-card,
+body[data-theme="dark"] .employee-card,
+body[data-theme="dark"] .report-card,
+body[data-theme="dark"] .setting-card {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+/* ============================================
+   BADGES / CHIPS / TAGS
+   ============================================ */
+
+body[data-theme="dark"] .orders-total-badge,
+body[data-theme="dark"] .customers-total-badge {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+
+/* ============================================
+   TOOLTIPS / DROPDOWNS
+   ============================================ */
+
+body[data-theme="dark"] .dropdown,
+body[data-theme="dark"] .dropdown-menu,
+body[data-theme="dark"] .tooltip {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+body[data-theme="dark"] .dropdown-item:hover {
+  background: #334155;
+}
+
+/* ============================================
+   SMOOTH TRANSITION FOR EVERYTHING
+   ============================================ */
+
+body,
+body * {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
+}
+
+/* Disable transition for animations */
+body .call-banner-icon,
+body .spinner,
+body .big-call-icon.active {
+  transition: none;
+}
+/* ============================================
+   🌙 HEADER DARK MODE
+   ============================================ */
+
+body[data-theme="dark"] .header {
+  background: #0f172a;
+  border-bottom: 1px solid #334155;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .page-title h1 {
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .page-title p {
+  color: #94a3b8;
+}
+
+body[data-theme="dark"] .menu-btn {
+  background: #1e293b;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .menu-btn:hover {
+  background: #334155;
+}
+
+/* Search Box */
+body[data-theme="dark"] .search-box {
+  background: transparent;
+}
+
+body[data-theme="dark"] .search-input {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .search-icon {
+  color: #64748b;
+}
+
+body[data-theme="dark"] .search-field {
+  background: transparent;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .search-field::placeholder {
+  color: #64748b;
+}
+
+body[data-theme="dark"] .search-field:focus {
+  outline: none;
+}
+
+/* Search Results Dropdown */
+body[data-theme="dark"] .search-results {
+  background: #0f172a;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+body[data-theme="dark"] .search-item {
+  border-bottom: 1px solid #334155;
+  color: #f1f5f9;
+}
+
+body[data-theme="dark"] .search-item:hover {
+  background: #1e293b;
+}
+
+body[data-theme="dark"] .search-badge {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+body[data-theme="dark"] .no-results,
+body[data-theme="dark"] .search-loading {
+  color: #94a3b8;
+}
+
+/* Icon Buttons */
+body[data-theme="dark"] .header-icon-btn {
+  background: #1e293b;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body[data-theme="dark"] .header-icon-btn:hover {
+  background: #334155;
+  color: #a78bfa;
+}
+
+body[data-theme="dark"] .notification-dot {
+  background: #ef4444;
+  border-color: #0f172a;
+}
+
+/* Profile Button */
+body[data-theme="dark"] .profile-btn {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border: 1px solid #334155;
+}
+
+body[data-theme="dark"] .profile-btn:hover {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+body[data-theme="dark"] .profile-image {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+body[data-theme="dark"] .profile-name {
+  color: #fff;
+}
+
+body[data-theme="dark"] .profile-role {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+body[data-theme="dark"] .profile-arrow {
+  color: #fff;
+}
+/* ============================================
+   🔥 ULTIMATE DARK MODE FIX
+   Har chuti hui cheez ko cover karta hai
+   ============================================ */
+
+/* ROOT LEVEL — Sab wrappers */
+body[data-theme="dark"],
+body[data-theme="dark"] #root,
+body[data-theme="dark"] .app,
+body[data-theme="dark"] .App,
+body[data-theme="dark"] .layout,
+body[data-theme="dark"] .main-layout,
+body[data-theme="dark"] .dashboard-layout,
+body[data-theme="dark"] .content,
+body[data-theme="dark"] .content-wrapper,
+body[data-theme="dark"] .page-wrapper,
+body[data-theme="dark"] .page-content {
+  background: #0a0e1a !important;
+  color: #e2e8f0 !important;
+}
+
+/* ============================================
+   FORCE ALL CARDS TO DARK
+   ============================================ */
+body[data-theme="dark"] [class*="card"],
+body[data-theme="dark"] [class*="Card"],
+body[data-theme="dark"] [class*="box"],
+body[data-theme="dark"] [class*="Box"],
+body[data-theme="dark"] [class*="panel"],
+body[data-theme="dark"] [class*="Panel"],
+body[data-theme="dark"] [class*="widget"],
+body[data-theme="dark"] [class*="container"],
+body[data-theme="dark"] [class*="wrapper"],
+body[data-theme="dark"] [class*="section"] {
+  background: #1e293b !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+/* ============================================
+   STAT CARDS — Dashboard top cards
+   ============================================ */
+body[data-theme="dark"] .stat-card,
+body[data-theme="dark"] .stats-card,
+body[data-theme="dark"] .dashboard-card,
+body[data-theme="dark"] .overview-card,
+body[data-theme="dark"] .summary-card,
+body[data-theme="dark"] .metric-card,
+body[data-theme="dark"] .info-card,
+body[data-theme="dark"] .total-card,
+body[data-theme="dark"] .kpi-card,
+body[data-theme="dark"] .count-card,
+body[data-theme="dark"] .number-card,
+body[data-theme="dark"] .leads-card,
+body[data-theme="dark"] .orders-card,
+body[data-theme="dark"] .revenue-card,
+body[data-theme="dark"] .sales-card,
+body[data-theme="dark"] .customers-card {
+  background: linear-gradient(145deg, #1e293b, #0f172a) !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ============================================
+   CHART CONTAINERS
+   ============================================ */
+body[data-theme="dark"] .chart,
+body[data-theme="dark"] .chart-box,
+body[data-theme="dark"] .chart-wrapper,
+body[data-theme="dark"] .chart-container,
+body[data-theme="dark"] .chart-card,
+body[data-theme="dark"] .revenue-chart,
+body[data-theme="dark"] .analytics-card,
+body[data-theme="dark"] .lead-analytics,
+body[data-theme="dark"] .revenue-trend {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+body[data-theme="dark"] .chart-container canvas,
+body[data-theme="dark"] .chart canvas,
+body[data-theme="dark"] canvas {
+  background: transparent !important;
+}
+
+/* ============================================
+   RECENT ORDERS / RECENT LEADS / ORDERS OVERVIEW
+   ============================================ */
+body[data-theme="dark"] .recent-orders,
+body[data-theme="dark"] .recent-leads,
+body[data-theme="dark"] .orders-overview,
+body[data-theme="dark"] .latest-orders,
+body[data-theme="dark"] .latest-leads,
+body[data-theme="dark"] .live-status,
+body[data-theme="dark"] .status-box,
+body[data-theme="dark"] .shipped-box {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+/* ============================================
+   TEXT COLORS FORCE
+   ============================================ */
+body[data-theme="dark"] h1,
+body[data-theme="dark"] h2,
+body[data-theme="dark"] h3,
+body[data-theme="dark"] h4,
+body[data-theme="dark"] h5,
+body[data-theme="dark"] h6 {
+  color: #f1f5f9 !important;
+}
+
+body[data-theme="dark"] p,
+body[data-theme="dark"] span,
+body[data-theme="dark"] div,
+body[data-theme="dark"] li,
+body[data-theme="dark"] td {
+  color: inherit;
+}
+
+/* Muted texts */
+body[data-theme="dark"] .subtitle,
+body[data-theme="dark"] .sub-title,
+body[data-theme="dark"] .description,
+body[data-theme="dark"] .muted,
+body[data-theme="dark"] .text-muted,
+body[data-theme="dark"] .light-text,
+body[data-theme="dark"] small {
+  color: #94a3b8 !important;
+}
+
+/* ============================================
+   REMOVE HARDCODED WHITE BACKGROUNDS
+   ============================================ */
+body[data-theme="dark"] [style*="background: white"],
+body[data-theme="dark"] [style*="background: #fff"],
+body[data-theme="dark"] [style*="background: #FFFFFF"],
+body[data-theme="dark"] [style*="background-color: white"],
+body[data-theme="dark"] [style*="background-color: #fff"] {
+  background: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+/* ============================================
+   TABLES INSIDE CARDS
+   ============================================ */
+body[data-theme="dark"] table,
+body[data-theme="dark"] .table,
+body[data-theme="dark"] .data-table {
+  background: transparent !important;
+  color: #e2e8f0 !important;
+}
+
+body[data-theme="dark"] th {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+body[data-theme="dark"] td {
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+/* ============================================
+   PROGRESS BARS
+   ============================================ */
+body[data-theme="dark"] .progress,
+body[data-theme="dark"] .progress-bar-bg {
+  background: #334155 !important;
+}
+
+body[data-theme="dark"] .progress-fill,
+body[data-theme="dark"] .progress-bar {
+  background: linear-gradient(90deg, #06b6d4, #3b82f6) !important;
+}
+
+/* ============================================
+   🔥 PAGE-SPECIFIC FIXES (Products/Employees/Reports)
+   ============================================ */
+
+/* ============================================
+   TOP WHITE STRIP FIX
+   Har page ke top me jo white strip dikhti hai
+   ============================================ */
+body[data-theme="dark"] .page,
+body[data-theme="dark"] .page-container,
+body[data-theme="dark"] .page-wrapper,
+body[data-theme="dark"] .content-area,
+body[data-theme="dark"] .content-wrapper,
+body[data-theme="dark"] .main-wrapper,
+body[data-theme="dark"] .products-page,
+body[data-theme="dark"] .employees-page,
+body[data-theme="dark"] .reports-page,
+body[data-theme="dark"] .customers-page,
+body[data-theme="dark"] .orders-page,
+body[data-theme="dark"] .leads-page,
+body[data-theme="dark"] .settings-page,
+body[data-theme="dark"] .profile-page {
+  background: #0a0e1a !important;
+  color: #e2e8f0 !important;
+  min-height: 100vh;
+}
+
+/* Header/toolbar of each page (jo white bar dikh rahi hai) */
+body[data-theme="dark"] .page-header,
+body[data-theme="dark"] .page-toolbar,
+body[data-theme="dark"] .products-header,
+body[data-theme="dark"] .employees-header,
+body[data-theme="dark"] .reports-header,
+body[data-theme="dark"] .customers-header,
+body[data-theme="dark"] .orders-header,
+body[data-theme="dark"] .leads-header,
+body[data-theme="dark"] .top-bar,
+body[data-theme="dark"] .action-bar,
+body[data-theme="dark"] .toolbar {
+  background: #0f172a !important;
+  border-bottom: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+/* ============================================
+   PRODUCTS PAGE FIX
+   ============================================ */
+body[data-theme="dark"] .product-card,
+body[data-theme="dark"] .products-card,
+body[data-theme="dark"] .product-item,
+body[data-theme="dark"] .product-box {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Product Title (Herbal Green Tea etc.) — CLEAR WHITE */
+body[data-theme="dark"] .product-card h1,
+body[data-theme="dark"] .product-card h2,
+body[data-theme="dark"] .product-card h3,
+body[data-theme="dark"] .product-card h4,
+body[data-theme="dark"] .product-name,
+body[data-theme="dark"] .product-title,
+body[data-theme="dark"] .product-heading {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Product Price */
+body[data-theme="dark"] .product-price,
+body[data-theme="dark"] .product-card .price {
+  color: #4ade80 !important;
+  font-weight: 700 !important;
+}
+
+/* Product Quantity/Category (25 Tea Bags, Wellness) */
+body[data-theme="dark"] .product-quantity,
+body[data-theme="dark"] .product-category,
+body[data-theme="dark"] .product-size,
+body[data-theme="dark"] .product-tag {
+  color: #94a3b8 !important;
+}
+
+/* Product Description */
+body[data-theme="dark"] .product-description,
+body[data-theme="dark"] .product-desc,
+body[data-theme="dark"] .product-card p {
+  color: #cbd5e1 !important;
+}
+
+/* Benefits section */
+body[data-theme="dark"] .product-benefits,
+body[data-theme="dark"] .benefits-title,
+body[data-theme="dark"] .product-card .benefits {
+  color: #fbbf24 !important;
+}
+
+/* ============================================
+   EMPLOYEES PAGE FIX
+   ============================================ */
+
+/* Error message (red bg pe red text problem) */
+body[data-theme="dark"] .employees-error,
+body[data-theme="dark"] .error-message,
+body[data-theme="dark"] .alert-danger,
+body[data-theme="dark"] .alert-error {
+  background: #450a0a !important;
+  color: #fecaca !important;
+  border: 1px solid #7f1d1d !important;
+  padding: 12px 20px !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+}
+
+/* Employee table wrapper */
+body[data-theme="dark"] .employees-table,
+body[data-theme="dark"] .employee-table,
+body[data-theme="dark"] .table-container,
+body[data-theme="dark"] .table-wrapper {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+body[data-theme="dark"] .employees-table thead,
+body[data-theme="dark"] .employee-table thead {
+  background: #0f172a !important;
+}
+
+body[data-theme="dark"] .employees-table th,
+body[data-theme="dark"] .employee-table th {
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 14px 20px !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+body[data-theme="dark"] .employees-table td,
+body[data-theme="dark"] .employee-table td {
+  color: #f1f5f9 !important;
+  padding: 14px 20px !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+/* ============================================
+   REPORTS PAGE FIX
+   ============================================ */
+
+/* Reports Dashboard title (jo invisible ho gaya hai) */
+body[data-theme="dark"] .reports-page h1,
+body[data-theme="dark"] .reports-title,
+body[data-theme="dark"] .reports-heading,
+body[data-theme="dark"] .reports-page .page-title,
+body[data-theme="dark"] .reports-dashboard-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+body[data-theme="dark"] .reports-page h2,
+body[data-theme="dark"] .reports-page h3 {
+  color: #f1f5f9 !important;
+}
+
+body[data-theme="dark"] .reports-subtitle,
+body[data-theme="dark"] .reports-page p {
+  color: #94a3b8 !important;
+}
+
+/* Reports Filter Section (From/To dates) */
+body[data-theme="dark"] .reports-filter,
+body[data-theme="dark"] .filter-section,
+body[data-theme="dark"] .date-filter,
+body[data-theme="dark"] .filter-bar {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+}
+
+body[data-theme="dark"] .filter-section label,
+body[data-theme="dark"] .reports-filter label,
+body[data-theme="dark"] .date-filter label {
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+body[data-theme="dark"] input[type="date"] {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+  padding: 10px 14px !important;
+  border-radius: 8px !important;
+}
+
+/* Date picker calendar icon */
+body[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(0.8);
+  cursor: pointer;
+}
+
+/* Report Stat Cards (Total Leads, Orders etc.) */
+body[data-theme="dark"] .report-stat-card,
+body[data-theme="dark"] .reports-stat,
+body[data-theme="dark"] .stat-box,
+body[data-theme="dark"] .metric-box {
+  background: linear-gradient(145deg, #1e293b, #0f172a) !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+}
+
+body[data-theme="dark"] .report-stat-card .stat-label,
+body[data-theme="dark"] .stat-box .label {
+  color: #94a3b8 !important;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+body[data-theme="dark"] .report-stat-card .stat-value,
+body[data-theme="dark"] .stat-box .value {
+  color: #ffffff !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+}
+
+/* Chart From/To buttons */
+body[data-theme="dark"] .chart-filter-btn,
+body[data-theme="dark"] .quick-filter-btn {
+  background: #1e293b !important;
+  color: #cbd5e1 !important;
+  border: 1px solid #334155 !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  cursor: pointer;
+}
+
+body[data-theme="dark"] .chart-filter-btn:hover,
+body[data-theme="dark"] .quick-filter-btn:hover {
+  background: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+body[data-theme="dark"] .chart-filter-btn.active,
+body[data-theme="dark"] .quick-filter-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* Chart Cards (Revenue Trend, Lead Status) */
+body[data-theme="dark"] .chart-section,
+body[data-theme="dark"] .chart-block,
+body[data-theme="dark"] .analytics-section {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+}
+
+body[data-theme="dark"] .chart-section h2,
+body[data-theme="dark"] .chart-section h3,
+body[data-theme="dark"] .chart-title {
+  color: #f1f5f9 !important;
+  margin-bottom: 15px !important;
+}
+
+/* ============================================
+
+/* ============================================
+   🔥 RECENT ACTIVITIES SECTION FIX
+   ============================================ */
+
+/* Section wrapper */
+body[data-theme="dark"] .recent-activities,
+body[data-theme="dark"] .activities-section,
+body[data-theme="dark"] .activity-section,
+body[data-theme="dark"] .activities-container,
+body[data-theme="dark"] .activity-container,
+body[data-theme="dark"] .activities-wrapper {
+  background: transparent !important;
+  color: #f1f5f9 !important;
+  padding: 20px 0 !important;
+}
+
+/* Section Title (Recent Activities) */
+body[data-theme="dark"] .recent-activities h2,
+body[data-theme="dark"] .recent-activities h3,
+body[data-theme="dark"] .activities-title,
+body[data-theme="dark"] .activity-title,
+body[data-theme="dark"] .section-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 22px !important;
+  margin-bottom: 20px !important;
+}
+
+/* Individual Activity Card/Item */
+body[data-theme="dark"] .activity-item,
+body[data-theme="dark"] .activity-card,
+body[data-theme="dark"] .activity-row,
+body[data-theme="dark"] .activity-box,
+body[data-theme="dark"] .activities-list li,
+body[data-theme="dark"] .activity-list-item,
+body[data-theme="dark"] .recent-activity-item {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+  padding: 16px 20px !important;
+  border-radius: 12px !important;
+  margin-bottom: 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+body[data-theme="dark"] .activity-item:hover,
+body[data-theme="dark"] .activity-card:hover,
+body[data-theme="dark"] .activity-row:hover {
+  background: #273449 !important;
+  border-color: #475569 !important;
+  transform: translateX(4px);
+}
+
+/* Activity Title (Order undefined created, pant added as Customer) */
+body[data-theme="dark"] .activity-item h3,
+body[data-theme="dark"] .activity-item h4,
+body[data-theme="dark"] .activity-title-text,
+body[data-theme="dark"] .activity-name,
+body[data-theme="dark"] .activity-heading {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  margin: 0 0 4px 0 !important;
+}
+
+/* Activity Type/Category (Order, Customer, Lead) */
+body[data-theme="dark"] .activity-type,
+body[data-theme="dark"] .activity-category,
+body[data-theme="dark"] .activity-subtitle,
+body[data-theme="dark"] .activity-item p,
+body[data-theme="dark"] .activity-item span {
+  color: #94a3b8 !important;
+  font-size: 13px !important;
+}
+
+/* Activity Date/Time (right side) */
+body[data-theme="dark"] .activity-date,
+body[data-theme="dark"] .activity-time,
+body[data-theme="dark"] .activity-timestamp,
+body[data-theme="dark"] .activity-item .date,
+body[data-theme="dark"] .activity-item .time {
+  color: #cbd5e1 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  opacity: 1 !important;
+}
+
+/* ============================================
+   COLOR CODING BY ACTIVITY TYPE
+   (Order = blue, Customer = green, Lead = purple)
+   ============================================ */
+
+/* Order activity */
+body[data-theme="dark"] .activity-item.order,
+body[data-theme="dark"] .activity-order {
+  border-left: 4px solid #3b82f6 !important;
+}
+
+body[data-theme="dark"] .activity-item.order .activity-type,
+body[data-theme="dark"] .activity-order .activity-type {
+  color: #60a5fa !important;
+}
+
+/* Customer activity */
+body[data-theme="dark"] .activity-item.customer,
+body[data-theme="dark"] .activity-customer {
+  border-left: 4px solid #10b981 !important;
+}
+
+body[data-theme="dark"] .activity-item.customer .activity-type,
+body[data-theme="dark"] .activity-customer .activity-type {
+  color: #34d399 !important;
+}
+
+/* Lead activity */
+body[data-theme="dark"] .activity-item.lead,
+body[data-theme="dark"] .activity-lead {
+  border-left: 4px solid #8b5cf6 !important;
+}
+
+body[data-theme="dark"] .activity-item.lead .activity-type,
+body[data-theme="dark"] .activity-lead .activity-type {
+  color: #a78bfa !important;
+}
+
+/* ============================================
+   FALLBACK — Generic activity structure
+   ============================================ */
+
+/* Agar class names alag hain to generic list items ko target karo */
+body[data-theme="dark"] ul.activities li,
+body[data-theme="dark"] ol.activities li,
+body[data-theme="dark"] .list-activity > div,
+body[data-theme="dark"] .timeline-item {
+  background: #1e293b !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #334155 !important;
+  padding: 16px 20px !important;
+  border-radius: 12px !important;
+  margin-bottom: 12px !important;
+}
+
+/* Force all text inside activity items to be visible */
+body[data-theme="dark"] .activity-item *,
+body[data-theme="dark"] .activity-card *,
+body[data-theme="dark"] .recent-activities * {
+  color: inherit;
+}
+
+/* Primary text (dark) */
+body[data-theme="dark"] .activity-item > div > strong,
+body[data-theme="dark"] .activity-item > div > b,
+body[data-theme="dark"] .activity-item > div:first-child {
+  color: #ffffff !important;
+}
+
+/* Secondary text (muted) */
+body[data-theme="dark"] .activity-item > div > small,
+body[data-theme="dark"] .activity-item > div:last-child {
+  color: #94a3b8 !important;
+}
+
+/* ============================================
+   🔥 CHART FILTER BAR FIX (Chart From/To Strip)
+   ============================================ */
+
+/* White strip wrapper — sabse important */
+body[data-theme="dark"] .chart-filter,
+body[data-theme="dark"] .chart-filter-bar,
+body[data-theme="dark"] .chart-date-filter,
+body[data-theme="dark"] .chart-controls,
+body[data-theme="dark"] .chart-toolbar,
+body[data-theme="dark"] .chart-header,
+body[data-theme="dark"] .date-range-bar,
+body[data-theme="dark"] .quick-filter-bar,
+body[data-theme="dark"] .filter-strip {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Labels — CHART FROM / CHART TO */
+body[data-theme="dark"] .chart-filter label,
+body[data-theme="dark"] .chart-filter-bar label,
+body[data-theme="dark"] .chart-date-filter label,
+body[data-theme="dark"] .chart-controls label,
+body[data-theme="dark"] .date-range-bar label,
+body[data-theme="dark"] .filter-strip label {
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-size: 12px !important;
+  letter-spacing: 0.5px !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
+/* Date input fields */
+body[data-theme="dark"] .chart-filter input[type="date"],
+body[data-theme="dark"] .chart-filter-bar input[type="date"],
+body[data-theme="dark"] .chart-date-filter input[type="date"],
+body[data-theme="dark"] .chart-controls input[type="date"],
+body[data-theme="dark"] .date-range-bar input[type="date"],
+body[data-theme="dark"] .filter-strip input[type="date"],
+body[data-theme="dark"] input[type="date"] {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+  padding: 10px 14px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  outline: none !important;
+}
+
+body[data-theme="dark"] input[type="date"]:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Calendar icon color fix */
+body[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(0.9) !important;
+  cursor: pointer !important;
+  opacity: 0.8 !important;
+}
+
+body[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1 !important;
+}
+
+/* Quick filter buttons (Last 7 Days, This Month) */
+body[data-theme="dark"] .quick-btn,
+body[data-theme="dark"] .quick-filter,
+body[data-theme="dark"] .preset-btn,
+body[data-theme="dark"] .chart-filter button,
+body[data-theme="dark"] .chart-filter-bar button,
+body[data-theme="dark"] .chart-date-filter button,
+body[data-theme="dark"] .date-range-bar button,
+body[data-theme="dark"] .filter-strip button,
+body[data-theme="dark"] .last-7-days-btn,
+body[data-theme="dark"] .this-month-btn {
+  background: #334155 !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #475569 !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+body[data-theme="dark"] .quick-btn:hover,
+body[data-theme="dark"] .quick-filter:hover,
+body[data-theme="dark"] .preset-btn:hover,
+body[data-theme="dark"] .chart-filter button:hover,
+body[data-theme="dark"] .chart-filter-bar button:hover,
+body[data-theme="dark"] .last-7-days-btn:hover,
+body[data-theme="dark"] .this-month-btn:hover {
+  background: #475569 !important;
+  border-color: #64748b !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* Active state */
+body[data-theme="dark"] .quick-btn.active,
+body[data-theme="dark"] .quick-filter.active,
+body[data-theme="dark"] .preset-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4) !important;
+}
+
+/* ============================================
+   🔥 SPAN BUTTONS/BADGES TEXT FIX
+   (Last 6 Months, Click to Filter, Live Status, 
+    Latest Entries, Latest Orders)
+   ============================================ */
+
+/* Card header ke andar sab spans */
+body[data-theme="dark"] .chart-card span,
+body[data-theme="dark"] .chart-container span,
+body[data-theme="dark"] .card-header span,
+body[data-theme="dark"] .recent-leads span,
+body[data-theme="dark"] .recent-orders span,
+body[data-theme="dark"] .orders-overview span,
+body[data-theme="dark"] .revenue-trend span,
+body[data-theme="dark"] .lead-analytics span {
+  color: #0f172a !important;
+}
+
+/* Agar span ke andar white background hai */
+body[data-theme="dark"] span[style*="background: white"],
+body[data-theme="dark"] span[style*="background: #fff"],
+body[data-theme="dark"] span[style*="background-color: white"],
+body[data-theme="dark"] span[style*="background-color: #fff"],
+body[data-theme="dark"] span[style*="background-color: rgb(255"] {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}

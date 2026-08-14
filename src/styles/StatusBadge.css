@@ -1,0 +1,84 @@
+/* ========================
+   STATUS BADGE STYLES
+======================== */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+/* ================== LEAD STATUSES ================== */
+.status-new {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-contacted {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.status-proposal-sent {
+  background-color: #ede9fe;
+  color: #6d28d9;
+}
+
+.status-negotiation {
+  background-color: #ffedd5;
+  color: #c2410c;
+}
+
+.status-converted {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status-lost {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ================== ORDER STATUSES ================== */
+.status-pending {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.status-processing {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-completed {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status-cancelled {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ================== USER STATUSES ================== */
+.status-active {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status-inactive {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+/* ================== DEFAULT ================== */
+.status-default {
+  background-color: #f3f4f6;
+  color: #374151;
+}

@@ -2,95 +2,135 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   getOrders,
-  createOrder,
   updateOrder,
   deleteOrder,
 } from "../services/orderService";
-import { getCustomers } from "../services/customerService";
+import "../styles/Orders.css";
+
+const STATUS_OPTIONS = [
+  "Pending", "Confirm", "Processing", "In Transit",
+  "Out for Delivery", "Pickup", "Shipped", "Delivered", "RTO", "Cancelled",
+];
+
+const FILTER_OPTIONS = [
+  "All", "Pending", "Confirm", "Processing", "In Transit",
+  "Out for Delivery", "Pickup", "Shipped", "RTO", "Cancelled",
+];
 
 function Orders() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const statusFilter = searchParams.get("status");
+  const urlStatus = searchParams.get("status");
+  const globalSearch = searchParams.get("search") || "";
 
   const [orders, setOrders] = useState([]);
-  const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [showForm, setShowForm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(globalSearch);
+  const [statusFilter, setStatusFilter] = useState(urlStatus || "All"); // ✅ CHANGED: Default "All"
 
-  const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
+  const [activeCall, setActiveCall] = useState(null); // ✅ NEW
+  const [copiedId, setCopiedId] = useState(null); // ✅ NEW
 
-  const [formData, setFormData] = useState({
-    customer: "",
-    amount: "",
-    status: "Pending",
-    notes: "",
-  });
+  const [dateFilter, setDateFilter] = useState({
+  startDate: "",
+  endDate: "",
+});
 
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [viewOrder, setViewOrder] = useState(null);
 
   useEffect(() => {
     fetchOrders();
-    fetchCustomers();
   }, []);
 
-  const fetchOrders = async (startDate, endDate) => {
+  useEffect(() => {
+    if (globalSearch) setSearchTerm(globalSearch);
+  }, [globalSearch]);
+
+  useEffect(() => {
+    if (urlStatus) setStatusFilter(urlStatus);
+  }, [urlStatus]);
+
+  const fetchOrders = async () => {
     try {
       setLoading(true);
-      const res = await getOrders(startDate, endDate);
-      setOrders(res.data);
+      const res = await getOrders();
+      setOrders(res.data || []);
     } catch (err) {
-      setError("Orders load nahi ho paaye");
+      setError("Orders load failed");
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchCustomers = async () => {
-    try {
-      const res = await getCustomers();
-      setCustomers(res.data);
-    } catch (err) {
-      setError("Customers load nahi ho paaye");
+  // ✅ NEW: Copy Lead ID
+  const copyLeadId = (leadId, e) => {
+    e.stopPropagation();
+    if (!leadId) return;
+    navigator.clipboard.writeText(leadId);
+    setCopiedId(leadId);
+    setTimeout(() => setCopiedId(null), 1500);
+  };
+
+  // ✅ NEW: Call function
+  const handleCall = (phone, name, orderId) => {
+    if (!phone) return alert("Phone number not found");
+    const cleanPhone = phone.replace(/\s+/g, "").replace(/[^0-9+]/g, "");
+
+    setActiveCall({ phone: cleanPhone, name, orderId });
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      window.location.href = `tel:${cleanPhone}`;
+    } else {
+      const choice = window.confirm(
+        `📞 Call ${name}?\nNumber: ${cleanPhone}\n\nOK = Open Call App\nCancel = Copy Number`
+      );
+      if (choice) {
+        window.location.href = `tel:${cleanPhone}`;
+      } else {
+        navigator.clipboard.writeText(cleanPhone);
+        alert(`✅ ${cleanPhone} copied!`);
+      }
+    }
+
+    setTimeout(() => {
+      setActiveCall((prev) => (prev && prev.orderId === orderId ? { ...prev, ended: true } : prev));
+    }, 3000);
+    setTimeout(() => setActiveCall(null), 6000);
+  };
+
+  const endCall = () => {
+    if (activeCall) {
+      setActiveCall((prev) => ({ ...prev, ended: true }));
+      setTimeout(() => setActiveCall(null), 2000);
     }
   };
 
-  const handleDateChange = (e) => {
-    setDateRange({ ...dateRange, [e.target.name]: e.target.value });
-  };
-
-  const applyFilter = () => {
-    fetchOrders(dateRange.startDate, dateRange.endDate);
-  };
-
-  const clearFilter = () => {
-    setDateRange({ startDate: "", endDate: "" });
-    fetchOrders();
-  };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await createOrder(formData);
-      setFormData({ customer: "", amount: "", status: "Pending", notes: "" });
-      setShowForm(false);
-      fetchOrders(dateRange.startDate, dateRange.endDate);
-    } catch (err) {
-      setError("Order create nahi ho paaya");
-    }
+  // ✅ NEW: WhatsApp function
+  const handleWhatsApp = (phone) => {
+    if (!phone) return alert("Phone number not found");
+    const cleanPhone = phone.replace(/\s+/g, "").replace(/[^0-9]/g, "");
+    const finalPhone = cleanPhone.startsWith("91") ? cleanPhone : `91${cleanPhone}`;
+    window.open(`https://wa.me/${finalPhone}`, "_blank");
   };
 
   const startEdit = (order) => {
+    setViewOrder(null);
     setEditingId(order._id);
     setEditData({
-      amount: order.amount,
-      status: order.status,
+      customerName: order.customerName || "",
+      email: order.email || "",
+      phone: order.phone || "",
+      address: order.address || "",
+      pincode: order.pincode || "",
+      city: order.city || "",
+      state: order.state || "",
+      product: order.product || "",
+      amount: order.amount || "",
+      status: order.status || "Pending",
       notes: order.notes || "",
     });
   };
@@ -108,307 +148,340 @@ function Orders() {
     try {
       await updateOrder(id, editData);
       setEditingId(null);
-      fetchOrders(dateRange.startDate, dateRange.endDate);
+      setEditData({});
+      fetchOrders();
+      if (editData.status === "Delivered") {
+        alert("✅ Order Delivered! Moved to Customers page. Revenue updated.");
+      } else {
+        alert("✅ Order updated successfully!");
+      }
     } catch (err) {
-      setError("Order update nahi ho paaya");
+      alert("❌ " + (err?.response?.data?.message || "Update failed."));
     }
   };
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete this order?")) return;
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this order?")) return;
     try {
       await deleteOrder(id);
-
-      fetchOrders(dateRange.startDate, dateRange.endDate);
-
-      alert("Order deleted successfully.");
+      fetchOrders();
+      alert("✅ Order deleted successfully!");
     } catch (err) {
-      console.error(err);
-
-      alert(err?.response?.data?.message || "Delete failed.");
+      alert("❌ " + (err?.response?.data?.message || "Delete failed."));
     }
   };
 
-  if (loading) return <p className="p-6">Loading orders...</p>;
+  const statusColors = {
+    Pending: "status-pending",
+    Confirm: "status-confirm",
+    Processing: "status-processing",
+    "In Transit": "status-transit",
+    "Out for Delivery": "status-outdelivery",
+    Pickup: "status-pickup",
+    Shipped: "status-shipped",
+    Delivered: "status-delivered",
+    RTO: "status-rto",
+    Cancelled: "status-cancelled",
+  };
 
-  // URL se aaye status ke hisaab se filter karo
-  const displayedOrders = statusFilter
-    ? orders.filter((order) => order.status === statusFilter)
-    : orders;
+  if (loading) return <p className="orders-loading">Loading orders...</p>;
+
+  const filteredOrders = orders.filter((order) => {
+    const keyword = searchTerm.toLowerCase();
+    const matchSearch =
+      order.customerName?.toLowerCase().includes(keyword) ||
+      order.phone?.toLowerCase().includes(keyword) ||
+      (order.product || "").toLowerCase().includes(keyword) ||
+      (order.leadId || "").toLowerCase().includes(keyword) ||
+      (order.email || "").toLowerCase().includes(keyword) ||
+      (order.city || "").toLowerCase().includes(keyword);
+
+    const matchStatus = statusFilter === "All" ? true : order.status === statusFilter;
+
+    let matchDate = true;
+    if (dateFilter.startDate && dateFilter.endDate) {
+      const created = new Date(order.createdAt);
+      const start = new Date(dateFilter.startDate);
+      const end = new Date(dateFilter.endDate);
+      end.setHours(23, 59, 59, 999);
+      matchDate = created >= start && created <= end;
+    }
+
+    return matchSearch && matchStatus && matchDate;
+  });
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h2 className="text-3xl font-bold text-gray-800">
-            Orders
-          </h2>
-
-          <p className="text-sm text-gray-500">
-            Manage all customer orders
-          </p>
-        </div>
-
-        <div className="flex gap-3 items-center">
-
-          <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-xl font-semibold">
-            Total : {displayedOrders.length}
-          </span>
-
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="px-5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700"
-          >
-            {showForm ? "Cancel" : "+ Add Order"}
-          </button>
-
-        </div>
-      </div>
-
-      {/* Filter badge — agar URL se status filter aaya hai */}
-      {
-        statusFilter && (
-          <div className="flex items-center gap-2 mb-4">
-            <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-              Filtered: {statusFilter}
-            </span>
-            <button
-              onClick={() => setSearchParams({})}
-              className="text-sm text-gray-500 underline"
-            >
-              Clear filter
-            </button>
-          </div>
-        )
-      }
-
-      {/* Date Range Filter */}
-      <div className="bg-white rounded-2xl shadow border border-gray-200 p-5 mb-6">
-
-        <div className="grid md:grid-cols-4 gap-4">
-
-          <div>
-            <label className="text-sm font-medium">
-              From
-            </label>
-
-            <input
-              type="date"
-              name="startDate"
-              value={dateRange.startDate}
-              onChange={handleDateChange}
-              className="w-full mt-1 border rounded-xl px-3 py-2"
-            />
-          </div>
-
-          <div>
-            <label className="text-sm font-medium">
-              To
-            </label>
-
-            <input
-              type="date"
-              name="endDate"
-              value={dateRange.endDate}
-              onChange={handleDateChange}
-              className="w-full mt-1 border rounded-xl px-3 py-2"
-            />
-          </div>
-
-          <button
-            onClick={applyFilter}
-            className="bg-blue-600 text-white rounded-xl"
-          >
-            Apply Filter
-          </button>
-
-          <button
-            onClick={clearFilter}
-            className="bg-gray-200 rounded-xl"
-          >
-            Reset
-          </button>
-
-        </div>
-
-      </div>
-
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-
-      {
-        showForm && (
-          <form onSubmit={handleSubmit} className="mb-6 border rounded-xl p-4 bg-white space-y-3">
-            <select name="customer" value={formData.customer} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg text-sm">
-              <option value="">-- Select Customer --</option>
-              {customers.map((c) => (
-                <option key={c._id} value={c._id}>{c.name}</option>
-              ))}
-            </select>
-            <input type="number" name="amount" placeholder="Amount" value={formData.amount} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg text-sm" />
-            <input type="text" name="notes" placeholder="Notes (optional)" value={formData.notes} onChange={handleChange} className="w-full px-3 py-2 border rounded-lg text-sm" />
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
-              Save Order
-            </button>
-          </form>
-        )
-      }
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {displayedOrders.length === 0 && <p className="text-gray-500">Is filter mein koi order nahi mila.</p>}
-
-        {displayedOrders.map((order) => (
-          <div key={order._id} className="bg-white rounded-2xl shadow-md border border-gray-200 hover:shadow-xl transition-all duration-300 p-5">
-            {editingId === order._id ? (
-              <>
-                <p className="font-semibold text-gray-800 mb-2">{order.customer?.name}</p>
-                <input type="number" name="amount" value={editData.amount} onChange={handleEditChange} className="w-full mb-2 px-2 py-1 border rounded text-sm" />
-                <select name="status" value={editData.status} onChange={handleEditChange} className="w-full mb-2 px-2 py-1 border rounded text-sm">
-                  <option value="Pending">Pending</option>
-                  <option value="Processing">Processing</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-                <input type="text" name="notes" value={editData.notes} onChange={handleEditChange} className="w-full mb-2 px-2 py-1 border rounded text-sm" />
-                <button onClick={() => saveEdit(order._id)} className="px-3 py-1 bg-blue-600 text-white rounded text-sm mr-2">Save</button>
-                <button onClick={cancelEdit} className="px-3 py-1 bg-gray-200 rounded text-sm">Cancel</button>
-              </>
+    <div className="orders-page">
+      {/* ✅ Call Banner */}
+      {activeCall && (
+        <div className={`call-banner ${activeCall.ended ? "ended" : "active"}`}>
+          <div className="call-banner-inner">
+            <div className={`call-banner-icon ${activeCall.ended ? "ended" : ""}`}>
+              {activeCall.ended ? "📵" : "📞"}
+            </div>
+            <div className="call-banner-info">
+              <div className="call-banner-name">
+                {activeCall.ended ? `Call Ended: ${activeCall.name}` : `Calling ${activeCall.name}...`}
+              </div>
+              <div className="call-banner-number">{activeCall.phone}</div>
+            </div>
+            {!activeCall.ended ? (
+              <button onClick={endCall} className="call-banner-end">End Call</button>
             ) : (
-              <>
-                <h4 className="text-lg font-bold text-gray-800">
-                  {order.customer?.name}
-                </h4>
-
-                <div className="mt-3">
-
-                  <p className="text-2xl font-bold text-blue-600">
-                    ₹{order.amount}
-                  </p>
-
-                </div>
-
-                <div className="mt-3">
-
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${order.status === "Completed"
-                      ? "bg-green-100 text-green-700"
-                      : order.status === "Pending"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : order.status === "Processing"
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                  >
-
-                    {order.status}
-
-                  </span>
-
-                </div>
-
-                <p className="text-sm text-gray-500 mt-3">
-                  {order.notes}
-                </p>
-
-                <p className="text-xs text-gray-400 mt-2">
-                  {new Date(order.createdAt).toLocaleDateString()}
-                </p>
-
-                <div className="mt-5">
-
-                  <div className="mt-4 flex gap-2">
-
-                    <button
-                      onClick={() => setSelectedOrder(order)}
-                      className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 rounded-lg text-sm"
-                    >
-                      View
-                    </button>
-
-                    <button
-                      onClick={() => startEdit(order)}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(order._id)}
-                      className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg text-sm"
-                    >
-                      Delete
-                    </button>
-
-                  </div>
-
-                </div>
-                {
-                  selectedOrder && (
-                    <div className="space-y-3">
-
-                      <div className="grid grid-cols-2 gap-3">
-
-                        <div>
-                          <p className="text-gray-500 text-sm">Customer</p>
-                          <p className="font-semibold">{selectedOrder.customer?.name}</p>
-                        </div>
-
-                        <div>
-                          <p className="text-gray-500 text-sm">Phone</p>
-                          <p className="font-semibold">{selectedOrder.customer?.phone}</p>
-                        </div>
-
-                        <div>
-                          <p className="text-gray-500 text-sm">Email</p>
-                          <p className="font-semibold break-all">
-                            {selectedOrder.customer?.email}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-gray-500 text-sm">Amount</p>
-                          <p className="text-green-600 text-xl font-bold">
-                            ₹₹{order.amount}
-                          </p>
-                        </div>
-
-                      </div>
-
-                      <div className="mt-3">
-
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${selectedOrder.status === "Completed"
-                              ? "bg-green-100 text-green-700"
-                              : selectedOrder.status === "Pending"
-                                ? "bg-yellow-100 text-yellow-700"
-                                : selectedOrder.status === "Processing"
-                                  ? "bg-blue-100 text-blue-700"
-                                  : "bg-red-100 text-red-700"
-                            }`}
-                        >
-                          {selectedOrder.status}
-                        </span>
-
-                      </div>
-
-                      <div className="mt-3">
-                        <p className="text-gray-500 text-sm">Notes</p>
-                        <p>{selectedOrder.notes || "No Notes"}</p>
-                      </div>
-
-                      <div className="mt-3">
-                        <p className="text-gray-500 text-sm">Created</p>
-                        <p>{new Date(selectedOrder.createdAt).toLocaleString()}</p>
-                      </div>
-
-                    </div>
-                  )
-                }
-
-              </>
+              <span className="call-banner-ended-text">Call Ended</span>
             )}
           </div>
+        </div>
+      )}
+
+      <div className="orders-header">
+        <div>
+          <h2 className="orders-title">Orders</h2>
+          <p className="orders-subtitle">Manage all customer orders</p>
+        </div>
+        <div className="orders-header-right">
+          <span className="orders-total-badge">Total: {filteredOrders.length}</span>
+        </div>
+      </div>
+
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search Name / Phone / Product / Lead ID / Email..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
+        />
+        <button onClick={() => setSearchTerm("")} className="btn btn-secondary">Clear</button>
+      </div>
+
+      <div className="date-filter-bar">
+        <div className="date-field">
+          <label>From</label>
+          <input
+            type="date"
+            value={dateFilter.startDate}
+            onChange={(e) => setDateFilter({ ...dateFilter, startDate: e.target.value })}
+            className="form-input"
+          />
+        </div>
+        <div className="date-field">
+          <label>To</label>
+          <input
+            type="date"
+            value={dateFilter.endDate}
+            onChange={(e) => setDateFilter({ ...dateFilter, endDate: e.target.value })}
+            className="form-input"
+          />
+        </div>
+        <button onClick={() => {
+          const t = new Date().toISOString().split("T")[0];
+          setDateFilter({ startDate: t, endDate: t });
+        }} className="btn btn-secondary">Today</button>
+        <button onClick={() => {
+          const now = new Date();
+          setDateFilter({
+            startDate: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`,
+            endDate: now.toISOString().split("T")[0],
+          });
+        }} className="btn btn-secondary">This Month</button>
+        <button onClick={() => setDateFilter({ startDate: "", endDate: "" })} className="btn btn-secondary">All Dates</button>
+      </div>
+
+      <div className="filter-buttons-full">
+        {FILTER_OPTIONS.map((opt) => (
+          <button
+            key={opt}
+            onClick={() => {
+              setStatusFilter(opt);
+              setSearchParams({});
+            }}
+            className={`filter-btn-full ${statusFilter === opt ? "active" : ""}`}
+          >
+            {opt}
+          </button>
         ))}
       </div>
-    </div >
+
+      {error && <p className="orders-error">{error}</p>}
+
+      {/* EDIT MODAL */}
+      {editingId && (
+        <div className="edit-overlay" onClick={cancelEdit}>
+          <div className="edit-full-card" onClick={(e) => e.stopPropagation()}>
+            <div className="edit-full-header">
+              <h3>✏️ Edit Order</h3>
+              <button onClick={cancelEdit} className="edit-close-btn">✕</button>
+            </div>
+            <div className="edit-form-grid">
+              <div className="form-field"><label className="input-label">Customer Name *</label><input type="text" name="customerName" value={editData.customerName} onChange={handleEditChange} className="form-input" /></div>
+              <div className="form-field"><label className="input-label">Phone</label><input type="tel" name="phone" value={editData.phone} onChange={handleEditChange} className="form-input" /></div>
+              <div className="form-field"><label className="input-label">Email</label><input type="email" name="email" value={editData.email} onChange={handleEditChange} className="form-input" /></div>
+              <div className="form-field"><label className="input-label">Product</label><input type="text" name="product" value={editData.product} onChange={handleEditChange} className="form-input" /></div>
+              <div className="form-field"><label className="input-label">Amount (₹) *</label><input type="number" name="amount" value={editData.amount} onChange={handleEditChange} className="form-input" /></div>
+              <div className="form-field">
+                <label className="input-label">Status *</label>
+                <select name="status" value={editData.status} onChange={handleEditChange} className="form-input">
+                  {STATUS_OPTIONS.map((s) => (
+                    <option key={s} value={s}>
+                      {s === "Delivered" ? "✅ Delivered (→ Customers)" : s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-field"><label className="input-label">Pincode</label><input type="text" name="pincode" value={editData.pincode} onChange={handleEditChange} maxLength={6} className="form-input" /></div>
+              <div className="form-field"><label className="input-label">City</label><input type="text" name="city" value={editData.city} onChange={handleEditChange} className="form-input" /></div>
+              <div className="form-field"><label className="input-label">State</label><input type="text" name="state" value={editData.state} onChange={handleEditChange} className="form-input" /></div>
+              <div className="form-field full"><label className="input-label">Address</label><input type="text" name="address" value={editData.address} onChange={handleEditChange} className="form-input" /></div>
+              <div className="form-field full"><label className="input-label">Notes</label><textarea name="notes" value={editData.notes} onChange={handleEditChange} rows={3} className="form-input" /></div>
+            </div>
+            <div className="edit-full-actions">
+              <button onClick={() => saveEdit(editingId)} className="btn btn-success btn-lg">💾 Save Changes</button>
+              <button onClick={cancelEdit} className="btn btn-secondary btn-lg">✕ Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ORDERS GRID - LEAD PAGE STYLE */}
+      {!editingId && (
+        <div className="leads-grid-new">
+          {filteredOrders.length === 0 && <p className="orders-empty">No orders found.</p>}
+          {filteredOrders.map((order) => {
+            const isCalling = activeCall && activeCall.orderId === order._id && !activeCall.ended;
+            const callEnded = activeCall && activeCall.orderId === order._id && activeCall.ended;
+            const isCopied = copiedId === order.leadCode;
+
+            return (
+              <div key={order._id} className="lead-card-new">
+                {/* LEFT PANEL */}
+                <div className="lead-card-left order-left">
+                  {/* ✅ Lead ID Tag (agar hai toh) */}
+                  <div
+                    className={`lead-id-tag ${isCopied ? "copied" : ""}`}
+                    onClick={(e) => copyLeadId(order.leadCode, e)}
+                    title="Click to copy Lead ID"
+                  >
+                    {isCopied ? "✓ Copied!" : (order.leadCode || "ORDER")}
+                  </div>
+
+                  <h3 className="lead-card-name">{order.customerName}</h3>
+
+                  <div className="lead-status-dot">
+                    <span className={`status-dot ${statusColors[order.status] || "status-default"}`}></span>
+                    <span className="status-text">{order.status}</span>
+                  </div>
+
+                  {order.phone && (
+                    <div className="left-call-icon-wrap">
+                      <button
+                        onClick={() => handleCall(order.phone, order.customerName, order._id)}
+                        className={`big-call-icon ${callEnded ? "ended" : isCalling ? "active" : ""}`}
+                        title="Call"
+                      >
+                        📞
+                      </button>
+                      <div className="left-status-label">
+                        {callEnded ? "CALL ENDED" : isCalling ? "CALLING..." : (order.status?.toUpperCase() || "ORDER")}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* RIGHT PANEL */}
+                <div className="lead-card-right">
+                  <div className="info-grid">
+                    <div className="info-box">
+                      <div className="info-icon icon-phone">📞</div>
+                      <div className="info-text">
+                        <div className="info-value">{order.phone || "N/A"}</div>
+                        <div className="info-label">Phone</div>
+                      </div>
+                    </div>
+                    <div className="info-box">
+                      <div className="info-icon icon-product">📦</div>
+                      <div className="info-text">
+                        <div className="info-value">{order.product || "N/A"}</div>
+                        <div className="info-label">Product</div>
+                      </div>
+                    </div>
+                    <div className="info-box">
+                      <div className="info-icon icon-money">💰</div>
+                      <div className="info-text">
+                        <div className="info-value">₹{Number(order.amount || 0).toLocaleString()}</div>
+                        <div className="info-label">Amount</div>
+                      </div>
+                    </div>
+                    <div className="info-box">
+                      <div className="info-icon icon-location">📍</div>
+                      <div className="info-text">
+                        <div className="info-value">{order.city || "N/A"}</div>
+                        <div className="info-label">Location</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="card-actions-new">
+                    {order.phone && (
+                      <>
+                        <button onClick={() => handleCall(order.phone, order.customerName, order._id)} className={`compact-btn ${callEnded ? "btn-call-ended" : isCalling ? "btn-call-active" : "btn-call"}`} title="Call">
+                          {callEnded ? "📵" : "📞"} Call
+                        </button>
+                        <button onClick={() => handleWhatsApp(order.phone)} className="action-btn btn-action-msg" title="WhatsApp">💬 Message</button>
+                      </>
+                    )}
+                    <button onClick={() => setViewOrder(order)} className="action-btn btn-action-view">👁 View</button>
+                    <button onClick={() => startEdit(order)} className="action-btn btn-action-edit">✏️ Edit</button>
+                    <button onClick={() => handleDelete(order._id)} className="action-btn btn-action-delete">🗑 Delete</button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* VIEW MODAL */}
+      {viewOrder && (
+        <div className="edit-overlay" onClick={() => setViewOrder(null)}>
+          <div className="view-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="edit-full-header">
+              <h3>👁 Order Details</h3>
+              <button onClick={() => setViewOrder(null)} className="edit-close-btn">✕</button>
+            </div>
+            <div className="view-body">
+              {viewOrder.leadId && (
+                <div className="view-row">
+                  <strong>Lead ID:</strong>
+                  <span
+                    className={`lead-id-tag-small ${copiedId === viewOrder.leadCode ? "copied" : ""}`}
+                    onClick={(e) => copyLeadId(viewOrder.leadCode, e)}
+                    title="Click to copy"
+                  >
+                    {copiedId === viewOrder.leadId ? "✓ Copied!" : viewOrder.leadId}
+                  </span>
+                </div>
+              )}
+              <div className="view-row"><strong>Customer:</strong> <span>{viewOrder.customerName}</span></div>
+              {viewOrder.email && <div className="view-row"><strong>Email:</strong> <span>{viewOrder.email}</span></div>}
+              {viewOrder.phone && <div className="view-row"><strong>Phone:</strong> <span>{viewOrder.phone}</span></div>}
+              {viewOrder.product && <div className="view-row"><strong>Product:</strong> <span>{viewOrder.product}</span></div>}
+              <div className="view-row"><strong>Amount:</strong> <span>₹{Number(viewOrder.amount || 0).toLocaleString()}</span></div>
+              {viewOrder.address && <div className="view-row"><strong>Address:</strong> <span>{viewOrder.address}</span></div>}
+              {viewOrder.city && <div className="view-row"><strong>City/State:</strong> <span>{viewOrder.city}, {viewOrder.state}</span></div>}
+              {viewOrder.pincode && <div className="view-row"><strong>Pincode:</strong> <span>{viewOrder.pincode}</span></div>}
+              <div className="view-row"><strong>Status:</strong> <span className={`compact-status ${statusColors[viewOrder.status]}`}>{viewOrder.status}</span></div>
+              {viewOrder.notes && <div className="view-row"><strong>Notes:</strong> <span>{viewOrder.notes}</span></div>}
+              <div className="view-row"><strong>Created:</strong> <span>{new Date(viewOrder.createdAt).toLocaleString()}</span></div>
+            </div>
+            <div className="edit-full-actions">
+              <button onClick={() => startEdit(viewOrder)} className="btn btn-action-edit btn-lg">✏️ Edit</button>
+              <button onClick={() => setViewOrder(null)} className="btn btn-secondary btn-lg">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 

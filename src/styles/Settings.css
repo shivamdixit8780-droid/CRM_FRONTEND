@@ -1,208 +1,403 @@
-/* ===============================
-   SETTINGS PAGE
-================================ */
+/* ========================
+   SETTINGS PAGE — COMPLETE
+======================== */
 
-.settings-page{
-    padding:30px;
-    background:#f8fafc;
-    min-height:100vh;
+.settings-page {
+  padding: 24px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f3f4f6;
+  min-height: 100vh;
 }
 
-.settings-title{
-    font-size:30px;
-    font-weight:700;
-    color:#1e293b;
-    margin-bottom:25px;
+/* Title */
+.settings-page h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 24px 0;
 }
 
-.settings-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
-    gap:22px;
+/* Error message */
+.settings-error {
+  color: #dc2626;
+  background-color: #fee2e2;
+  padding: 10px 15px;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
 }
 
-/* ===============================
-   CARD
-================================ */
-
-.setting-card{
-    background:#fff;
-    border-radius:14px;
-    padding:22px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.3s;
+/* Grid layout */
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-.setting-card:hover{
-    transform:translateY(-3px);
+/* All cards */
+.setting-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
 }
 
-.setting-card h4{
-    margin-bottom:18px;
-    color:#2563eb;
-    font-size:20px;
+.setting-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
-/* ===============================
-   INPUT
-================================ */
-
-.setting-card input[type=text],
-.setting-card input[type=password]{
-
-    width:100%;
-    padding:12px;
-    border:1px solid #dbe2ea;
-    border-radius:8px;
-    margin-bottom:15px;
-    outline:none;
-    transition:.25s;
-
+/* Card headings */
+.setting-card h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.setting-card input:focus{
-
-    border-color:#2563eb;
-    box-shadow:0 0 0 3px rgba(37,99,235,.15);
-
+/* Card text */
+.setting-card p {
+  color: #4b5563;
+  font-size: 14px;
+  margin: 0 0 16px 0;
+  line-height: 1.5;
 }
 
-.setting-card input[type=file]{
-
-    margin:10px 0 20px;
-
+.setting-card p strong {
+  color: #1f2937;
+  font-weight: 600;
 }
 
-/* ===============================
-   BUTTON
-================================ */
-
-.setting-btn{
-
-    background:#2563eb;
-    color:white;
-    border:none;
-    padding:11px 18px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:.3s;
-
+/* Theme card specific */
+.theme-switch-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.setting-btn:hover{
-
-    background:#1d4ed8;
-
+.theme-label {
+  font-size: 14px;
+  color: #4b5563;
 }
 
-.setting-btn:disabled{
-
-    opacity:.5;
-    cursor:not-allowed;
-
+/* Company logo */
+.company-logo {
+  max-width: 120px;
+  max-height: 90px;
+  border-radius: 10px;
+  object-fit: contain;
+  border: 1px solid #e5e7eb;
+  padding: 6px;
+  margin-bottom: 16px;
+  background-color: #f9fafb;
+  display: block;
 }
 
-/* ===============================
-   COMPANY LOGO
-================================ */
-
-.company-logo{
-
-    width:90px;
-    height:90px;
-    border-radius:50%;
-    object-fit:cover;
-    border:3px solid #2563eb;
-    margin-bottom:15px;
-
+/* Form inputs */
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #1f2937;
+  outline: none;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+  font-family: inherit;
 }
 
-/* ===============================
-   ACCOUNT INFO
-================================ */
-
-.account-info p{
-
-    margin:10px 0;
-    color:#475569;
-
+.form-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-/* ===============================
-   TABLE
-================================ */
-
-.login-table{
-
-    width:100%;
-    border-collapse:collapse;
-
+/* File input */
+.form-file {
+  display: block;
+  width: 100%;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #6b7280;
+  cursor: pointer;
 }
 
-.login-table thead{
-
-    background:#2563eb;
-    color:white;
-
+/* Buttons */
+.btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-block;
+  text-align: center;
 }
 
-.login-table th{
-
-    padding:14px;
-
+.btn-primary {
+  background-color: #2563eb;
+  color: #fff;
 }
 
-.login-table td{
-
-    padding:14px;
-    border-bottom:1px solid #eee;
-
+.btn-primary:hover:not(:disabled) {
+  background-color: #1d4ed8;
 }
 
-.login-table tbody tr:hover{
-
-    background:#f8fafc;
-
+.btn-dark-toggle {
+  background-color: #1f2937;
+  color: #fff;
 }
 
-.success{
-
-    color:#16a34a;
-    font-weight:600;
-
+.btn-dark-toggle:hover {
+  background-color: #000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.failed{
-
-    color:#dc2626;
-    font-weight:600;
-
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-/* ===============================
-   ERROR
-================================ */
-
-.error{
-
-    background:#fee2e2;
-    color:#dc2626;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:20px;
-
+/* Success / info messages */
+.msg {
+  margin-top: 10px;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
 }
 
-/* ===============================
-   Responsive
-================================ */
-
-@media(max-width:768px){
-
-.settings-grid{
-
-grid-template-columns:1fr;
-
+/* Login history table */
+.login-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 8px;
 }
 
+.login-table thead th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  border-bottom: 2px solid #e5e7eb;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.login-table tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+}
+
+.login-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.success-text {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.fail-text {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.empty-msg {
+  text-align: center;
+  color: #9ca3af;
+  padding: 24px;
+  font-style: italic;
+}
+
+/* Full width card */
+.full-width {
+  grid-column: span 2;
+}
+
+.account-card p {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.account-card p:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* ========================
+   DARK MODE — FULLY FIXED
+======================== */
+body[data-theme="dark"] .settings-page {
+  background-color: #020617;
+}
+
+body[data-theme="dark"] .settings-page h2 {
+  color: #f8fafc;
+}
+
+body[data-theme="dark"] .setting-card {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+}
+
+body[data-theme="dark"] .setting-card:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
+  border-color: #475569 !important;
+}
+
+body[data-theme="dark"] .setting-card h4 {
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+body[data-theme="dark"] .setting-card p,
+body[data-theme="dark"] .setting-card span,
+body[data-theme="dark"] .theme-label {
+  color: #cbd5e1 !important;
+}
+
+body[data-theme="dark"] .setting-card strong {
+  color: #f8fafc !important;
+}
+
+/* Theme switch */
+body[data-theme="dark"] .theme-card {
+  background-color: #0f172a !important;
+}
+
+body[data-theme="dark"] .theme-label {
+  color: #94a3b8;
+}
+
+/* Company logo dark */
+body[data-theme="dark"] .company-logo {
+  border-color: #334155;
+  background-color: #020617;
+}
+
+/* Inputs dark */
+body[data-theme="dark"] .form-input {
+  background-color: #020617 !important;
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+body[data-theme="dark"] .form-input:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+body[data-theme="dark"] .form-file {
+  color: #94a3b8;
+}
+
+/* Buttons dark */
+body[data-theme="dark"] .btn-dark-toggle {
+  background-color: #334155 !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #475569 !important;
+}
+
+body[data-theme="dark"] .btn-dark-toggle:hover {
+  background-color: #475569 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body[data-theme="dark"] .btn-primary {
+  background-color: #2563eb !important;
+  color: white !important;
+}
+
+body[data-theme="dark"] .btn:disabled {
+  opacity: 0.4;
+}
+
+/* Messages dark */
+body[data-theme="dark"] .msg {
+  background-color: #0f2e1c !important;
+  color: #86efac !important;
+  border-color: #166534 !important;
+}
+
+body[data-theme="dark"] .settings-error {
+  background-color: #2a0a0a !important;
+  border-color: #7f1d1d !important;
+  color: #fca5a5 !important;
+}
+
+/* Table dark */
+body[data-theme="dark"] .login-table {
+  color: #e2e8f0;
+}
+
+body[data-theme="dark"] .login-table th {
+  color: #94a3b8;
+  border-bottom-color: #334155;
+  background-color: #020617;
+}
+
+body[data-theme="dark"] .login-table td {
+  color: #cbd5e1;
+  border-bottom-color: #1e293b;
+}
+
+body[data-theme="dark"] .login-table tbody tr:hover {
+  background-color: #1e293b;
+}
+
+body[data-theme="dark"] .success-text {
+  color: #4ade80;
+}
+
+body[data-theme="dark"] .fail-text {
+  color: #f87171;
+}
+
+body[data-theme="dark"] .empty-msg {
+  color: #64748b;
+}
+
+/* Account info specific dark */
+body[data-theme="dark"] .account-card p {
+  border-bottom-color: #334155;
+}
+
+body[data-theme="dark"] .account-card p strong {
+  color: #f8fafc;
+}
+
+/* Full width */
+body[data-theme="dark"] .full-width {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-page {
+    padding: 16px;
+  }
 }

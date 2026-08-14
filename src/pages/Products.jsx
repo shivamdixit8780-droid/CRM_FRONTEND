@@ -1,12 +1,21 @@
 import { useState, useEffect } from "react";
-import { getProducts, createProduct, updateProduct, deleteProduct } from "../services/productService";
+import {
+  getProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "../services/productService";
 import { useAuth } from "../context/AuthContext";
-import immunityImg from "../assets/images/HerbalimmunityBooster.png";
-import hairOilImg from "../assets/images/HerbalHairoil.png";
-import faceWashImg from "../assets/images/Herbalfacewash.png";
-import greenTeaImg from "../assets/images/Herbalgreentea.png";
+import "../styles/Products.css";
+
+// Import all product images
+import immunityImg from "../assets/images/HerbalImmunityBooster.png";
+import hairOilImg from "../assets/images/HerbalHairOil.png";
+import faceWashImg from "../assets/images/HerbalFaceWash.png";
+import greenTeaImg from "../assets/images/HerbalGreenTea.png";
+
 function Products() {
-  const { user } = useAuth(); // role check karne ke liye
+  const { user } = useAuth();
   const isAdmin = user?.role === "admin";
   const canManage = user?.role === "admin" || user?.role === "manager";
 
@@ -14,14 +23,18 @@ function Products() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null); // For view modal
 
   const [formData, setFormData] = useState({
-    image: "",
     name: "",
     price: "",
-    category: "",
+    category: "Herbal",
     description: "",
+    usage: "",
+    benefits: "",
     stock: "",
+    size: "",
+    image: "",
   });
 
   const [editingId, setEditingId] = useState(null);
@@ -35,7 +48,7 @@ function Products() {
     try {
       setLoading(true);
       const res = await getProducts();
-      setProducts(res.data);
+      setProducts(res.data || []);
     } catch (err) {
       setError("Products load nahi ho paaye");
     } finally {
@@ -50,15 +63,23 @@ function Products() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Validate min price 1200
+      if (formData.price < 1200) {
+        alert("Price must be at least ₹1200");
+        return;
+      }
       await createProduct(formData);
       setFormData({
-  image: "",
-  name: "",
-  price: "",
-  category: "",
-  description: "",
-  stock: "",
-});
+        name: "",
+        price: "",
+        category: "Herbal",
+        description: "",
+        usage: "",
+        benefits: "",
+        stock: "",
+        size: "",
+        image: "",
+      });
       setShowForm(false);
       fetchProducts();
     } catch (err) {
@@ -71,9 +92,12 @@ function Products() {
     setEditData({
       name: product.name,
       price: product.price,
-      category: product.category || "",
+      category: product.category || "Herbal",
       description: product.description || "",
+      usage: product.usage || "",
+      benefits: product.benefits || "",
       stock: product.stock ?? "",
+      size: product.size || "",
     });
   };
 
@@ -88,6 +112,10 @@ function Products() {
 
   const saveEdit = async (id) => {
     try {
+      if (editData.price < 1200) {
+        alert("Price must be at least ₹1200");
+        return;
+      }
       await updateProduct(id, editData);
       setEditingId(null);
       fetchProducts();
@@ -97,6 +125,7 @@ function Products() {
   };
 
   const handleDelete = async (id) => {
+    if (!window.confirm("Delete this product?")) return;
     try {
       await deleteProduct(id);
       fetchProducts();
@@ -105,175 +134,142 @@ function Products() {
     }
   };
 
-  if (loading) return <p>Loading products...</p>;
+  // Get correct image by name
+  const getProductImage = (name) => {
+    switch (name) {
+      case "Herbal Immunity Booster": return immunityImg;
+      case "Herbal Hair Oil": return hairOilImg;
+      case "Herbal Face Wash": return faceWashImg;
+      case "Herbal Green Tea": return greenTeaImg;
+      default: return immunityImg;
+    }
+  };
+
+  if (loading) return <p className="products-loading">Loading products...</p>;
 
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-        <h2>Products</h2>
+    <div className="products-page">
 
-        {/* sirf admin/manager ko "Add Product" dikhega */}
+      {/* Header */}
+      <div className="products-header">
+        <h2 className="products-title">Products</h2>
         {canManage && (
-          <button
-            onClick={() => setShowForm(!showForm)}
-            style={{
-              background: "#4f46e5",
-              color: "#fff",
-              border: "none",
-              padding: "10px 18px",
-              borderRadius: "10px",
-              cursor: "pointer",
-              fontWeight: "600"
-            }}
-          >
+          <button onClick={() => setShowForm(!showForm)} className="btn btn-primary">
             {showForm ? "Cancel" : "+ Add Product"}
           </button>
         )}
       </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="products-error">{error}</p>}
 
+      {/* Add Product Form */}
       {showForm && canManage && (
-        <form onSubmit={handleSubmit} style={{ marginBottom: "20px", border: "1px solid #ddd", padding: "16px" }}>
-          <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
-          <br /><br />
-          <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleChange} required />
-          <br /><br />
-          <input type="text" name="category" placeholder="Category" value={formData.category} onChange={handleChange} />
-          <br /><br />
-          <input type="text" name="description" placeholder="Description" value={formData.description} onChange={handleChange} />
-          <br /><br />
-
-          {/* stock field sirf admin ko dikhega form mein bhi */}
+        <form onSubmit={handleSubmit} className="product-form">
+          <input type="text" name="name" placeholder="Product Name" value={formData.name} onChange={handleChange} required className="form-input" />
+          <input type="number" name="price" placeholder="Price (min ₹1200)" value={formData.price} onChange={handleChange} min="1200" required className="form-input" />
+          <input type="text" name="category" placeholder="Category" value={formData.category} onChange={handleChange} className="form-input" />
+          <input type="text" name="size" placeholder="Size (e.g. 100 ml)" value={formData.size} onChange={handleChange} className="form-input" />
+          <textarea name="description" placeholder="Product Description" value={formData.description} onChange={handleChange} rows={3} required className="form-input" />
+          <textarea name="usage" placeholder="How to Use (step by step)" value={formData.usage} onChange={handleChange} rows={4} required className="form-input" />
+          <input type="text" name="benefits" placeholder="Benefits (comma separated)" value={formData.benefits} onChange={handleChange} className="form-input" />
           {isAdmin && (
-            <>
-              <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleChange} />
-              <br /><br />
-            </>
+            <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleChange} className="form-input" />
           )}
-
-          <button type="submit">Save Product</button>
+          <button type="submit" className="btn btn-primary">Save Product</button>
         </form>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "16px" }}>
-        {products.length === 0 && <p>Koi product nahi mila.</p>}
+      {/* Products Grid */}
+      <div className="products-grid">
+        {products.length === 0 && <p className="products-empty">Koi product nahi mila.</p>}
 
         {products.map((product) => (
-          <div
-            key={product._id}
-            style={{
-              background: "#fff",
-              border: "1px solid #e5e7eb",
-              borderRadius: "16px",
-              padding: "18px",
-              boxShadow: "0 2px 10px rgba(0,0,0,.05)",
-              transition: "0.3s"
-            }}
-          >
+          <div key={product._id} className="product-card">
 
             {editingId === product._id ? (
-              <>
-                <input type="text" name="name" value={editData.name} onChange={handleEditChange} style={{ width: "100%", marginBottom: "6px" }} />
-                <input type="number" name="price" value={editData.price} onChange={handleEditChange} style={{ width: "100%", marginBottom: "6px" }} />
-                <input type="text" name="category" value={editData.category} onChange={handleEditChange} style={{ width: "100%", marginBottom: "6px" }} />
-                <input type="text" name="description" value={editData.description} onChange={handleEditChange} style={{ width: "100%", marginBottom: "6px" }} />
-
+              <div className="edit-form">
+                <input type="text" name="name" value={editData.name} onChange={handleEditChange} className="form-input" placeholder="Name" />
+                <input type="number" name="price" value={editData.price} onChange={handleEditChange} min="1200" className="form-input" placeholder="Price" />
+                <input type="text" name="size" value={editData.size} onChange={handleEditChange} className="form-input" placeholder="Size" />
+                <textarea name="description" value={editData.description} onChange={handleEditChange} rows={2} className="form-input" placeholder="Description" />
+                <textarea name="usage" value={editData.usage} onChange={handleEditChange} rows={3} className="form-input" placeholder="How to Use" />
+                <input type="text" name="benefits" value={editData.benefits} onChange={handleEditChange} className="form-input" placeholder="Benefits" />
                 {isAdmin && (
-                  <input type="number" name="stock" value={editData.stock} onChange={handleEditChange} style={{ width: "100%", marginBottom: "6px" }} />
+                  <input type="number" name="stock" value={editData.stock} onChange={handleEditChange} className="form-input" placeholder="Stock" />
                 )}
-
-                <button onClick={() => saveEdit(product._id)} style={{ marginRight: "6px" }}>Save</button>
-                <button onClick={cancelEdit}>Cancel</button>
-              </>
+                <div className="card-actions">
+                  <button onClick={() => saveEdit(product._id)} className="btn btn-primary">Save</button>
+                  <button onClick={cancelEdit} className="btn btn-secondary">Cancel</button>
+                </div>
+              </div>
             ) : (
               <>
-                <img
-  src={
-    product.name === "Herbal Immunity Booster"
-      ? immunityImg
-      : product.name === "Herbal Hair Oil"
-      ? hairOilImg
-      : product.name === "Herbal Face Wash"
-      ? faceWashImg
-      : product.name === "Herbal Green Tea"
-      ? greenTeaImg
-      : immunityImg
-  }
-  alt={product.name}
-  style={{
-    width: "100%",
-    height: "250px",
-    objectFit: "cover",
-    borderRadius: "12px",
-    marginBottom: "15px"
-  }}
-/>
+                <div className="product-image-wrapper">
+                  <img src={getProductImage(product.name)} alt={product.name} className="product-image" />
+                  {product.size && <span className="product-size-badge">{product.size}</span>}
+                </div>
 
-                <h4 style={{
-                  marginBottom: "10px",
-                  fontSize: "20px",
-                  fontWeight: "700",
-                  color: "#111827"
-                }}>{product.name}
+                <div className="product-info">
+                  <h4 className="product-name">{product.name}</h4>
+                  <p className="product-price">₹{product.price?.toLocaleString()}</p>
+                  <p className="product-category">{product.category}</p>
+                  <p className="product-description">{product.description}</p>
 
-                </h4>
-                <p style={{
-                  color: "#4f46e5",
-                  fontSize: "22px",
-                  fontWeight: "700",
-                  marginBottom: "8px"
-                }}>₹{product.price}</p>
-                <p style={{
-                  color: "#6b7280",
-                  fontSize: "14px",
-                  marginBottom: "8px"
-                }}>{product.category}</p>
-                <p style={{
-                  color: "#6b7280",
-                  lineHeight: "22px",
-                  marginBottom: "10px"
-                }}>{product.description}</p>
+                  {product.benefits && (
+                    <div className="product-benefits">
+                      <strong>✨ Benefits:</strong>
+                      <p>{product.benefits}</p>
+                    </div>
+                  )}
 
-                {/* stock field sirf tab dikhega jab backend ne bheja ho (matlab admin hi hai) */}
-                {product.stock !== undefined && (
-                  <p style={{
-                    color: "#16a34a",
-                    fontWeight: "700",
-                    marginBottom: "15px"
-                  }}>
-                    Stock: {product.stock}
-                  </p>
-                )}
+                  {product.stock !== undefined && (
+                    <p className="product-stock">📦 Stock: {product.stock}</p>
+                  )}
 
-                {canManage && (
-                  <div style={{ marginTop: "8px" }}>
-                    <button onClick={() => startEdit(product)} style={{
-                      background: "#eef2ff",
-                      color: "#4f46e5",
-                      border: "1px solid #4f46e5",
-                      padding: "8px 18px",
-                      borderRadius: "10px",
-                      cursor: "pointer",
-                      marginRight: "10px",
-                      fontWeight: "600"
-                    }}>Edit</button>
-                    <button onClick={() => handleDelete(product._id)} style={{
-                      background: "#fef2f2",
-                      color: "#dc2626",
-                      border: "1px solid #dc2626",
-                      padding: "8px 18px",
-                      borderRadius: "10px",
-                      cursor: "pointer",
-                      fontWeight: "600"
-                    }}>Delete</button>
-                  </div>
-                )}
+                  {/* View Details Button */}
+                  <button onClick={() => setSelectedProduct(product)} className="btn btn-info">
+                    📖 How to Use
+                  </button>
+
+                  {canManage && (
+                    <div className="card-actions">
+                      <button onClick={() => startEdit(product)} className="btn btn-edit">Edit</button>
+                      <button onClick={() => handleDelete(product._id)} className="btn btn-delete">Delete</button>
+                    </div>
+                  )}
+                </div>
               </>
             )}
           </div>
         ))}
       </div>
+
+      {/* Modal — How to Use */}
+      {selectedProduct && (
+        <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setSelectedProduct(null)}>✕</button>
+            <img src={getProductImage(selectedProduct.name)} alt={selectedProduct.name} className="modal-image" />
+            <h3>{selectedProduct.name}</h3>
+            <p className="modal-price">₹{selectedProduct.price?.toLocaleString()}</p>
+            <div className="modal-section">
+              <h4>📝 Description</h4>
+              <p>{selectedProduct.description}</p>
+            </div>
+            <div className="modal-section">
+              <h4>🔹 How to Use</h4>
+              <pre className="usage-steps">{selectedProduct.usage}</pre>
+            </div>
+            {selectedProduct.benefits && (
+              <div className="modal-section">
+                <h4>✨ Benefits</h4>
+                <p>{selectedProduct.benefits}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
